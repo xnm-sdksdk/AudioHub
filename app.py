@@ -1,12 +1,19 @@
 from imports import *
 
-def optionsMenu():
-    secondary = customtkinter.CTk()
-    secondary.title("Secondary Window")
-    secondary.geometry("300x200")
+def optionsMenu(toggle_frame):
+    appEntry = customtkinter.CTk()
+    appEntry.title("Secondary Window")
+    appEntry.geometry("300x200")
     
-    label = customtkinter.CTkLabel(secondary, text="This is the second window")
-    label.pack(pady=20)
+    tabView = customtkinter.CTkTabview(appEntry, width=500, height=500, fg_color="black")
+    tabView.pack(padx=20, pady=20) 
     
-    secondary.mainloop()
+    tabView = tabView.add("Catalog")
+    tabView = tabView.add("Settings")
+    
+    
+    tabView.set("Catalog")
+       
+    
+    appEntry.mainloop()
     
