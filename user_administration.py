@@ -21,6 +21,16 @@ def mainLayout():
         for user in users:
             cleanFile = user.strip().replace(';', '')
             listbox.insert(END, cleanFile)
+            
+    
+    promoteAdmin = tk.Button(mainLayout, text="Promote User")
+    promoteAdmin.grid(row=0, column=1)
+    
+    demoteUser = tk.Button(mainLayout, text="Demote User")
+    demoteUser.grid(row=0, column=1)
+            
+    deleteButton = tk.Button(mainLayout, text="Delete User")
+    deleteButton.grid(row=1, column=1)
     
     mainLayout.mainloop()
 
