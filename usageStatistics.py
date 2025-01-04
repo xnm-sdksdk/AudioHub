@@ -18,3 +18,8 @@ def numberOfPodcasts():
     pass
 
 
+def musicWithMoreLikes():
+    pass
+
+def musicWithBestRating():
+    pass
