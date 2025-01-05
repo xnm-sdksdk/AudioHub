@@ -2,7 +2,7 @@
 from imports import *
 
 # initialization of the data
-file = {"categories": {}, "favorites": []}
+file = {"music_categories": {}, "podcast_categories": {}, "favorites": []}
 
 # file to hold the data
 saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.json"
@@ -13,6 +13,14 @@ catalogLayout = tk.Tk()
 catalogLayout.title("Catalog")
 catalogFrame = tk.Frame(catalogLayout, width=200, height=200)
 catalogFrame.grid(row=0, column=0)
+
+# combobox for categories selection
+selectedCategory = tk.StringVar()
+typeCategory = ttk.Combobox(catalogLayout, textvariable=selectedCategory)
+typeCategory['values'] = ('Podcast', 'Music')
+typeCategory.current(1)
+
+typeCategory.grid(row=0, column=2)
     
 # category layout
 category = tk.StringVar()
@@ -20,11 +28,14 @@ categoryEntry = tk.Entry(catalogLayout, width=20, textvariable = category)
 categoryEntry.grid(row=0, column=0)
 
 def addCategory():
-    name = category.get()
-    file["categories"][name] = []
-    with open(saveData, "w") as saveFile:
-        json.dump(file, saveFile, indent=4)
-    print(f"Category '{name}' added.")
+    type = selectedCategory.get().lower() + "_categories"
+    name = category.get().strip()
+    if name:
+        if name not in file[type]:
+            file[type][name] = []
+            with open(saveData, "w") as saveFile:
+                json.dump(file, saveFile, indent=4)
+            print(f"Category '{name}' added.")
     
     
 
