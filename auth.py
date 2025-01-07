@@ -1,6 +1,6 @@
 from imports import *
 
-usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files"
+authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.json"
 
 
 # auth mainlayout
@@ -29,34 +29,45 @@ usernameEntry.grid(row=1, column=0)
 passwordEntry = tk.Entry(authFrame, width=20, textvariable = passWord)
 passwordEntry.grid(row=1, column=2)
 
-authObject =  {
-"id": uuid.uuid4(),
-"name": userName,
-"resources": {
-    "music": [],
-    "podcasts": [],
-},
-    "auth": "user"
-}
-
 
 # login method
 def loginAccount():
     username = userName.get()
     password = passWord.get()
-    #with open('users.txt', mode = 'r', encoding= 'utf-8') as usersFile:
-    for user in usersFile:
-        usersFile.read(username, password).split("\n")
 
 
 # create account method
-def createAccount(name):
-    file = open(usersFile, "r", encoding="utf-8")
+def createAccount():
+    name = userName.get()
+    password = passWord.get()
+    
+    if os.path.exists(authFile):
+        with open(authFile, "r") as usersFile:
+            try:
+                loadData = json.load(usersFile)
+                print("Loaded data from file:", loadData)
+            except json.JSONDecodeError:
+                loadData = {}
+    else:
+        loadData = {}               
+            
 
+    authObject =  {
+    "id": str(uuid.uuid4()),
+    "name": name,
+    "password": password,
+    "resources": {
+        "music": [],
+        "podcasts": [],
+    },
+        "auth": "user"
+    }
+
+    loadData[name] = authObject
     
-    ##for user in usersFile:
-        
-    
+    with open(authFile, "w") as usersFile:
+        json.dump(loadData, usersFile, indent=2)
+    print("Account created {name}")
     
 
 

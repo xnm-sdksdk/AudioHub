@@ -2,7 +2,7 @@
 from imports import *
 
 # initialization of the data
-file = {"music_categories": {}, "podcast_categories": {}, "favorites": []}
+catalogFile = {"music_categories": {}, "podcast_categories": {}, "favorites": []}
 
 # file to hold the data
 saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.json"
@@ -40,10 +40,10 @@ def addCategory():
     type = selectedCategory.get().lower() + "_categories"
     name = category.get().strip()
     if name:
-        if name not in file[type]:
-            file[type][name] = []
+        if name not in catalogFile[type]:
+            catalogFile[type][name] = []
             with open(saveData, "w") as saveFile:
-                json.dump(file, saveFile, indent=4)
+                json.dump(catalogFile, saveFile, indent=4)
             print(f"Category '{name}' added.")
     
     
