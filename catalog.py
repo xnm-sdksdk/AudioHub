@@ -11,21 +11,30 @@ saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 # main layout
 catalogLayout = tk.Tk()
 catalogLayout.title("Catalog")
-catalogFrame = tk.Frame(catalogLayout, width=200, height=200)
+catalogFrame = tk.Frame(catalogLayout, width=500, height=500)
 catalogFrame.grid(row=0, column=0)
 
 # combobox for categories selection
 selectedCategory = tk.StringVar()
-typeCategory = ttk.Combobox(catalogLayout, textvariable=selectedCategory)
+typeCategory = ttk.Combobox(catalogFrame, textvariable=selectedCategory)
 typeCategory['values'] = ('Podcast', 'Music')
 typeCategory.current(1)
+typeCategory.grid(row=0, column=0)
 
-typeCategory.grid(row=0, column=2)
     
-# category layout
+# category entry and label
+categoryLabel = tk.Label(catalogFrame, text="Select a category:")
+categoryLabel.grid(row=1, column=0)
+
 category = tk.StringVar()
-categoryEntry = tk.Entry(catalogLayout, width=20, textvariable = category)
-categoryEntry.grid(row=0, column=0)
+categoryEntry = tk.Entry(catalogFrame, width=20, textvariable = category)
+categoryEntry.grid(row=1, column=1)
+
+# resource entry
+category = tk.StringVar()
+categoryEntry = tk.Entry(catalogFrame, width=20, textvariable = category)
+categoryEntry.grid(row=2, column=0)
+
 
 def addCategory():
     type = selectedCategory.get().lower() + "_categories"
@@ -38,8 +47,6 @@ def addCategory():
             print(f"Category '{name}' added.")
     
     
-
-
 def addResource():
     pass
 
@@ -57,12 +64,12 @@ def addToFavorites():
 
 
 # button category
-addCategoryButton = tk.Button(catalogLayout, text="Add Category", command=addCategory)
+addCategoryButton = tk.Button(catalogFrame, text="Add Category", command=addCategory)
 addCategoryButton.grid(row=2, column=0)
 
 # # button resource
-# addResourceButton = tk.Button(catalogLayout, text="Add Resource", command=addResource)
-# addResourceButton.grid(row=1, column=0)
+addResourceButton = tk.Button(catalogFrame, text="Add Resource", command=addResource)
+addResourceButton.grid(row=2, column=1)
 
 # # button Like Resource
 # likeResourceButton = tk.Button(catalogLayout, text="Like Resource", command=likeResource)
