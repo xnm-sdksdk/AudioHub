@@ -34,7 +34,19 @@ passwordEntry.grid(row=1, column=2)
 def loginAccount():
     username = userName.get()
     password = passWord.get()
-
+    
+    if os.path.exists(authFile):
+        with open(authFile, "r") as usersFile:
+            try:
+                loadUser = json.load(usersFile)
+                if username in loadUser:
+                    userData = loadUser[username]
+                    if userData["password"] == password:
+                        print("login successful")
+                    else:
+                        print("login failed")
+            except json.JSONDecodeError:
+                print("file empty")
 
 # create account method
 def createAccount():
@@ -86,5 +98,9 @@ def validateSession():
 # button register
 registerButton = tk.Button(authFrame, text="Register", command=createAccount)
 registerButton.grid(row=2, column=0)
+
+# button login
+loginButton = tk.Button(authFrame, text="Login", command=loginAccount)
+loginButton.grid(row=3, column=0)
 
 authLayout.mainloop()
