@@ -65,7 +65,7 @@ def createAccount():
 
     loadData[name] = authObject
     
-    with open(authFile, "w") as usersFile:
+    with open(authFile, "a") as usersFile:
         json.dump(loadData, usersFile, indent=2)
     print("Account created {name}")
     

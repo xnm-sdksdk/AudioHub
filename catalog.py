@@ -42,7 +42,7 @@ def addCategory():
     if name:
         if name not in catalogFile[type]:
             catalogFile[type][name] = []
-            with open(saveData, "w") as saveFile:
+            with open(saveData, "a") as saveFile:
                 json.dump(catalogFile, saveFile, indent=4)
             print(f"Category '{name}' added.")
     
