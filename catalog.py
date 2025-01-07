@@ -11,6 +11,7 @@ saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 # main layout
 catalogLayout = tk.Tk()
 catalogLayout.title("Catalog")
+catalogLayout.geometry("500x500")
 catalogFrame = tk.Frame(catalogLayout, width=500, height=500)
 catalogFrame.grid(row=0, column=0)
 
@@ -44,8 +45,11 @@ def addCategory():
             catalogFile[type][name] = []
             with open(saveData, "a") as saveFile:
                 json.dump(catalogFile, saveFile, indent=4)
-            print(f"Category '{name}' added.")
-    
+            messagebox.showinfo("Category", "Category added!")
+        else:
+            messagebox.showerror("Category", "Category already exists!")
+    else:
+        messagebox.showerror("Category", "Category cannot be empty!")
     
 def addResource():
     pass

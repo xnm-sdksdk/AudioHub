@@ -37,16 +37,15 @@ def loginAccount():
     
     if os.path.exists(authFile):
         with open(authFile, "r") as usersFile:
-            try:
-                loadUser = json.load(usersFile)
-                if username in loadUser:
-                    userData = loadUser[username]
-                    if userData["password"] == password:
-                        print("login successful")
-                    else:
-                        print("login failed")
-            except json.JSONDecodeError:
-                print("file empty")
+            loadUser = json.load(usersFile)
+            if username in loadUser:
+                userData = loadUser[username]
+                if userData["password"] == password:
+                    messagebox.showinfo("Login", "Login Successful!")
+            else:
+                messagebox.showerror("Login", "User not found!")    
+
+                
 
 # create account method
 def createAccount():
