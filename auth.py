@@ -60,8 +60,7 @@ def createAccount():
             except json.JSONDecodeError:
                 loadData = {}
     else:
-        loadData = {}               
-            
+        loadData = {}
 
     authObject =  {
     "id": str(uuid.uuid4()),
@@ -76,10 +75,13 @@ def createAccount():
 
     loadData[name] = authObject
     
-    with open(authFile, "a") as usersFile:
-        json.dump(loadData, usersFile, indent=2)
-    print("Account created {name}")
-    
+    if name and password:
+        with open(authFile, "a") as usersFile:
+            json.dump(loadData, usersFile, indent=2)
+        messagebox.showinfo("Register", "Account created successfully!")
+    else :
+        messagebox.showerror("Register", "Username or Password not filled!")
+
 
 
 def logoutAccount():

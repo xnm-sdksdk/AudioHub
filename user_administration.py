@@ -1,7 +1,7 @@
 from imports import *
 from tkinter import *
 
-usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
+usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.json"
 
 # Area destined to manage users
 def mainLayout():
@@ -17,10 +17,9 @@ def mainLayout():
 
 
     with open(usersFile, "r") as file:
-        users = file.readlines()
-        for user in users:
-            cleanFile = user.strip().replace(';', '')
-            listbox.insert(END, cleanFile)
+        users = json.load(file)
+        for username in users.keys():
+                listbox.insert(END, username)
             
     
     promoteAdmin = tk.Button(mainLayout, text="Promote User")
