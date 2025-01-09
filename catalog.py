@@ -5,7 +5,7 @@ from imports import *
 catalogFile = {"music_categories": {}, "podcast_categories": {}, "favorites": []}
 
 # file to hold the data
-saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.json"
+saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.txt"
 
 
 # main layout

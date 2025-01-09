@@ -1,6 +1,6 @@
 from imports import *
 
-authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.json"
+authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
 
 # auth mainlayout
@@ -51,7 +51,7 @@ def loginAccount():
 def createAccount():
     name = userName.get()
     password = passWord.get()
-    
+
     if os.path.exists(authFile):
         with open(authFile, "r") as usersFile:
             try:
@@ -62,26 +62,31 @@ def createAccount():
     else:
         loadData = {}
 
-    authObject =  {
-    "id": str(uuid.uuid4()),
-    "name": name,
-    "password": password,
-    "resources": {
-        "music": [],
-        "podcasts": [],
-    },
+    if not name or not password:
+        messagebox.showerror("Register", "Username or Password not filled!")
+        return
+
+    if name in loadData:
+        messagebox.showerror("Register", "Username already exists!")
+        return
+
+    authObject = {
+        "id": str(uuid.uuid4()),
+        "name": name,
+        "password": password,
+        "resources": {
+            "music": [],
+            "podcasts": []
+        },
         "auth": "user"
     }
 
     loadData[name] = authObject
-    
-    if name and password:
-        with open(authFile, "a") as usersFile:
-            json.dump(loadData, usersFile, indent=2)
-        messagebox.showinfo("Register", "Account created successfully!")
-    else :
-        messagebox.showerror("Register", "Username or Password not filled!")
 
+    with open(authFile, "w") as usersFile:
+        json.dump(loadData, usersFile, indent=2)
+
+    messagebox.showinfo("Register", "Account created successfully!")
 
 
 def logoutAccount():

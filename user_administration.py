@@ -1,38 +1,73 @@
 from imports import *
 from tkinter import *
 
-usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.json"
+usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
 # Area destined to manage users
-def mainLayout():
     
-    mainLayout = tk.Tk()
-    mainFrame = tk.Frame(mainLayout, width=200, height=200)
-    mainFrame.grid(row=0, column=0, padx=0)
+mainLayout = tk.Tk()
+mainLayout.title("Administration")
+mainLayout.geometry("800x800")
+mainFrame = tk.Frame(mainLayout, width=800, height=800)
+mainFrame.grid(row=0, column=0)
     
     
-    listbox = Listbox(mainFrame)
-    
-    listbox.grid(row=0, column=0, padx=0)  
+listbox = Listbox(mainFrame, width=30, height=20)
+listbox.grid(row=1, column=0, padx=0)  
 
-
-    with open(usersFile, "r") as file:
-        users = json.load(file)
-        for username in users.keys():
+if os.path.exists(usersFile):
+    try:
+        with open(usersFile, "r") as file:
+            users = json.load(file)
+            for username in users.keys():
                 listbox.insert(END, username)
-            
+    except json.JSONDecodeError:
+        print("Error reading file: ", __file__)
     
-    promoteAdmin = tk.Button(mainLayout, text="Promote User")
-    promoteAdmin.grid(row=0, column=1)
     
-    demoteUser = tk.Button(mainLayout, text="Demote User")
-    demoteUser.grid(row=0, column=1)
-            
-    deleteButton = tk.Button(mainLayout, text="Delete User")
-    deleteButton.grid(row=1, column=1)
-    
-    mainLayout.mainloop()
+def promoteUser():
+    pass
 
 
-if __name__ == "__main__":
-    mainLayout()
+def demoteUser():
+    pass
+
+
+def deleteUser():
+    selectedUser = listbox.get(tk.ACTIVE)
+    
+    if not selectedUser:
+        messagebox.showerror("Delete", "Select a user to delete." )
+        return
+    
+    if os.path.exists(usersFile):
+        with open(usersFile, "r") as file:
+            try:
+                loadData = json.load(file)
+            except json.JSONDecodeError:
+                print("Error reading file: ", __file__)
+    else:
+        messagebox.showerror("Deleting User", "Error deleting user!")
+        
+        
+    if selectedUser in loadData:
+        decision = messagebox.askyesno("Delete", "Are you sure you want to delete this user ?")
+        if decision:
+            loadData[selectedUser]
+            
+            with open(usersFile, "w") as file:
+                json.dump(loadData, file, indent=2)
+            listbox.delete(tk.ACTIVE)
+            messagebox.showinfo("Deleting User", f"User {selectedUser} delete.")
+                
+
+promoteAdminButton = tk.Button(mainLayout, text="Promote User")
+promoteAdminButton.grid(row=0, column=3)
+    
+demoteUserButton = tk.Button(mainLayout, text="Demote User")
+demoteUserButton.grid(row=0, column=4)
+            
+deleteButtonButton = tk.Button(mainLayout, text="Delete User")
+deleteButtonButton.grid(row=0, column=5)
+    
+mainLayout.mainloop()
