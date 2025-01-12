@@ -1,9 +1,6 @@
 # imports
 from imports import *
 
-# initialization of the data
-catalogFile = {"music_categories": {}, "podcast_categories": {}, "favorites": []}
-
 # file to hold the data
 saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.txt"
 
@@ -61,7 +58,7 @@ def addCategory():
         if name not in catalogFile[type]:
             catalogFile[type][name] = []
             with open(saveData, "a") as saveFile:
-                json.dump(catalogFile, saveFile, indent=4)
+                saveFile.write(catalogFile, saveFile)
             messagebox.showinfo("Category", "Category added!")
             populateGenders()
         else:
@@ -91,8 +88,8 @@ def readGenders():
     global catalogFile
     with open(saveData, "r") as genderFile:
         try:
-            catalogFile = json.load(genderFile)
-        except json.JSONDecodeError:
+            catalogFile = genderFile.readline(genderFile)
+        except:
             catalogFile
 
 

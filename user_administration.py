@@ -18,10 +18,10 @@ listbox.grid(row=1, column=0, padx=0)
 if os.path.exists(usersFile):
     try:
         with open(usersFile, "r") as file:
-            users = json.load(file)
-            for username in users.keys():
+            users = file.readline(file)
+            for username in users:
                 listbox.insert(END, username)
-    except json.JSONDecodeError:
+    except:
         print("Error reading file: ", __file__)
     
     
@@ -43,8 +43,8 @@ def deleteUser():
     if os.path.exists(usersFile):
         with open(usersFile, "r") as file:
             try:
-                loadData = json.load(file)
-            except json.JSONDecodeError:
+                loadData = file.readline(file)
+            except:
                 print("Error reading file: ", __file__)
     else:
         messagebox.showerror("Deleting User", "Error deleting user!")
@@ -56,7 +56,7 @@ def deleteUser():
             loadData[selectedUser]
             
             with open(usersFile, "w") as file:
-                json.dump(loadData, file, indent=2)
+                file.write(loadData, file, indent=2)
             listbox.delete(tk.ACTIVE)
             messagebox.showinfo("Deleting User", f"User {selectedUser} delete.")
                 

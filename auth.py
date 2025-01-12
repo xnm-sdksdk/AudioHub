@@ -37,7 +37,7 @@ def loginAccount():
     
     if os.path.exists(authFile):
         with open(authFile, "r") as usersFile:
-            loadUser = json.load(usersFile)
+            loadUser = usersFile.readline(usersFile)
             if username in loadUser:
                 userData = loadUser[username]
                 if userData["password"] == password:
@@ -52,42 +52,25 @@ def createAccount():
     name = userName.get()
     password = passWord.get()
 
-    if os.path.exists(authFile):
-        with open(authFile, "r") as usersFile:
-            try:
-                loadData = json.load(usersFile)
-                print("Loaded data from file:", loadData)
-            except json.JSONDecodeError:
-                loadData = {}
-    else:
-        loadData = {}
-
     if not name or not password:
         messagebox.showerror("Register", "Username or Password not filled!")
         return
 
-    if name in loadData:
-        messagebox.showerror("Register", "Username already exists!")
-        return
+    if os.path.exists(authFile):
+        with open(authFile, "r") as usersFile:
+            for line in usersFile:
+                try:
+                    loadData = usersFile.readline(line)
+                    print("Loaded data from file:", loadData)
+                except:
+                    messagebox.showerror("Register", "User not found")
 
-    authObject = {
-        "id": str(uuid.uuid4()),
-        "name": name,
-        "password": password,
-        "resources": {
-            "music": [],
-            "podcasts": []
-        },
-        "auth": "user"
-    }
-
-    loadData[name] = authObject
-
-    with open(authFile, "w") as usersFile:
-        json.dump(loadData, usersFile, indent=2)
-
+    fileToWrite = open(authFile, "a")
+    fieldData = name + ";" + password + ";" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ";" + "user" + ";"
+    fileToWrite.write(fieldData)
+    fileToWrite.close()
     messagebox.showinfo("Register", "Account created successfully!")
-
+    return
 
 def logoutAccount():
     pass
