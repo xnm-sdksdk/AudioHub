@@ -16,14 +16,15 @@ listbox = Listbox(mainFrame, width=30, height=20)
 listbox.grid(row=1, column=0, padx=0)  
 
 if os.path.exists(usersFile):
-    try:
-        with open(usersFile, "r") as file:
-            users = file.readline(file)
-            for username in users:
-                listbox.insert(END, username)
-    except:
-        print("Error reading file: ", __file__)
-    
+    with open(usersFile, "r") as file:
+        try:
+            for line in file:
+                user = line.strip()
+                if user:
+                    listbox.insert(END, user)
+        except:
+            print("Error reading file: ", __file__)
+            
     
 def promoteUser():
     pass

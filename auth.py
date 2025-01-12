@@ -66,7 +66,7 @@ def createAccount():
                     messagebox.showerror("Register", "User not found")
 
     fileToWrite = open(authFile, "a")
-    fieldData = name + ";" + password + ";" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ";" + "user" + ";"
+    fieldData = name + ";" + password + ";" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ";" + "user" + ";" + "\n"
     fileToWrite.write(fieldData)
     fileToWrite.close()
     messagebox.showinfo("Register", "Account created successfully!")
