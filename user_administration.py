@@ -39,13 +39,14 @@ def mainUserAdministration():
     demoteUserButton = tk.Button(right_frame, text="Demote User")
     demoteUserButton.grid(row=1, column=8, pady=5, padx=15)
                 
-    deleteButtonButton = tk.Button(right_frame, text="Delete User")
+    deleteButtonButton = tk.Button(right_frame, text="Delete User", command=deleteUser)
     deleteButtonButton.grid(row=2, column=8, pady=5, padx=15)
 
             
 def populateTreeView():
-    
-    treeview.delete(*treeview.get_children())
+    for item in treeview.get_children():
+        treeview.delete(item)
+        
     if os.path.exists(usersFile):
         try:
             with open(usersFile, "r") as file:
@@ -68,33 +69,33 @@ def demoteUser():
 
 
 def deleteUser():
-    selectedUser = treeview.get(tk.ACTIVE)
+    selectedUser = treeview.focus()
     
     if not selectedUser:
         messagebox.showerror("Delete", "Select a user to delete." )
         return
     
-    if os.path.exists(usersFile):
+    data = treeview.item(selectedUser)["values"]
+    name = data[0]
+    
+    confirme = messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete user '{name}'?")
+    if not confirme:
+        return
+    
+    try:
         with open(usersFile, "r") as file:
-            try:
-                loadData = file.readline(file)
-            except:
-                print("Error reading file: ", __file__)
-    else:
-        messagebox.showerror("Deleting User", "Error deleting user!")
-        
-        
-    if selectedUser in loadData:
-        decision = messagebox.askyesno("Delete", "Are you sure you want to delete this user ?")
-        if decision:
-            loadData[selectedUser]
+            loadData = file.readlines()
+        with open(usersFile, "w") as file:
+            for line in loadData:
+                uData = line.strip().split(";")
+                if len(uData) >= 2 and uData[0] != name:
+                    file.write(line)
+        treeview.delete(selectedUser)
+        populateTreeView()
+        messagebox.showinfo("User deleted", f"User {name}, deleted successfully.")
+    except Exception as e:
+        messagebox.showerror("Error deleting user", f"Error deleting user: {str(e)}")
             
-            with open(usersFile, "w") as file:
-                file.write(loadData, file, indent=2)
-            treeview.delete(tk.ACTIVE)
-            messagebox.showinfo("Deleting User", f"User {selectedUser} delete.")
-                
-
 
 mainUserAdministration()
 populateTreeView() 
