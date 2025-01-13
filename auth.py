@@ -42,8 +42,10 @@ def loginAccount():
                 userData = loadUser[username]
                 if userData["password"] == password:
                     messagebox.showinfo("Login", "Login Successful!")
+                    return
             else:
-                messagebox.showerror("Login", "User not found!")    
+                messagebox.showerror("Login", "User not found!")
+                return
 
                 
 
@@ -57,20 +59,26 @@ def createAccount():
         return
 
     if os.path.exists(authFile):
-        with open(authFile, "r") as usersFile:
-            for line in usersFile:
-                try:
-                    loadData = usersFile.readline(line)
-                    print("Loaded data from file:", loadData)
-                except:
-                    messagebox.showerror("Register", "User not found")
+        try:
+            with open(authFile, "r") as usersFile:
+                for user in usersFile:
+                    if len(user) >= 2 and user[0] == name:
+                        messagebox.showerror("Register", "Username already exists!")
+                        return
+        except Exception as e:
+            messagebox.showerror("Register", f"User not found: {str(e)}")
+            return
 
-    fileToWrite = open(authFile, "a")
-    fieldData = name + ";" + password + ";" + datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S") + ";" + "user" + ";" + "\n"
-    fileToWrite.write(fieldData)
-    fileToWrite.close()
-    messagebox.showinfo("Register", "Account created successfully!")
-    return
+    try:
+        with open(authFile, "a") as write:
+            data = f"{name};{password};{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')};user\n"
+            write.write(data)
+        messagebox.showinfo("Register", "Account created successfully!")
+        return        
+    except Exception as e:
+        messagebox.showerror("Register", f"Error creating account: {str(e)}")
+        return
+ 
 
 def logoutAccount():
     pass
