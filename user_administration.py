@@ -4,27 +4,60 @@ from tkinter import *
 usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
 # Area destined to manage users
+def mainUserAdministration():
+    global mainLayout, treeview
+    mainLayout = tk.Tk()
+    mainLayout.title("Administration")
+    mainLayout.geometry("1000x1000")
+    mainFrame = tk.Frame(mainLayout, width=1000, height=1000)
+    mainFrame.grid(row=0, column=0)
     
-mainLayout = tk.Tk()
-mainLayout.title("Administration")
-mainLayout.geometry("800x800")
-mainFrame = tk.Frame(mainLayout, width=800, height=800)
-mainFrame.grid(row=0, column=0)
+        
+    left_frame = tk.Frame(mainFrame)
+    left_frame.grid(row=0, column=0, padx=10, pady=1)
+    
+    paned = PanedWindow(mainFrame, width=7000, height=300, bd="3", relief="sunken")
+    paned.grid(row=1, column=0)
+    treeview = ttk.Treeview(paned, selectmode="browse", columns=("id", "name", "register", "type"), show="headings")
+    treeview.heading("id", text="ID")
+    treeview.heading("name", text="Name")
+    treeview.heading("register", text="Register Date")
+    treeview.heading("type", text="Type")
+    treeview.column("id", width=100)
+    treeview.column("name", anchor=tk.W, width=200)
+    treeview.column("register", width=300)
+    treeview.column("type", width=100)
+    treeview.grid(row=2, column=0, padx=0)
     
     
-listbox = Listbox(mainFrame, width=30, height=20)
-listbox.grid(row=1, column=0, padx=0)  
+    right_frame = tk.Frame(mainFrame)
+    right_frame.grid(row=1, column=1, padx=10, pady=10)
+    
+    promoteAdminButton = tk.Button(right_frame, text="Promote User")
+    promoteAdminButton.grid(row=0, column=8, pady=5, padx=15)
+        
+    demoteUserButton = tk.Button(right_frame, text="Demote User")
+    demoteUserButton.grid(row=1, column=8, pady=5, padx=15)
+                
+    deleteButtonButton = tk.Button(right_frame, text="Delete User")
+    deleteButtonButton.grid(row=2, column=8, pady=5, padx=15)
 
-if os.path.exists(usersFile):
-    with open(usersFile, "r") as file:
-        try:
-            for line in file:
-                user = line.strip()
-                if user:
-                    listbox.insert(END, user)
-        except:
-            print("Error reading file: ", __file__)
             
+def populateTreeView():
+    
+    treeview.delete(*treeview.get_children())
+    if os.path.exists(usersFile):
+        try:
+            with open(usersFile, "r") as file:
+                for line in file:
+                    user = line.strip().split(";")
+                    if len(user) >= 2:
+                        treeview.insert("", "end", values=(user[0], user[1], user[2], user[3]))
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to read users file: {str(e)}")
+    else:
+        messagebox.showerror("Error", "Users file not found")
+    
     
 def promoteUser():
     pass
@@ -35,7 +68,7 @@ def demoteUser():
 
 
 def deleteUser():
-    selectedUser = listbox.get(tk.ACTIVE)
+    selectedUser = treeview.get(tk.ACTIVE)
     
     if not selectedUser:
         messagebox.showerror("Delete", "Select a user to delete." )
@@ -58,17 +91,11 @@ def deleteUser():
             
             with open(usersFile, "w") as file:
                 file.write(loadData, file, indent=2)
-            listbox.delete(tk.ACTIVE)
+            treeview.delete(tk.ACTIVE)
             messagebox.showinfo("Deleting User", f"User {selectedUser} delete.")
                 
 
-promoteAdminButton = tk.Button(mainLayout, text="Promote User")
-promoteAdminButton.grid(row=0, column=3)
-    
-demoteUserButton = tk.Button(mainLayout, text="Demote User")
-demoteUserButton.grid(row=0, column=4)
-            
-deleteButtonButton = tk.Button(mainLayout, text="Delete User")
-deleteButtonButton.grid(row=0, column=5)
-    
+
+mainUserAdministration()
+populateTreeView() 
 mainLayout.mainloop()
