@@ -53,7 +53,7 @@ def populateTreeView():
                 for line in file:
                     user = line.strip().split(";")
                     if len(user) >= 2:
-                        treeview.insert("", "end", values=(user[0], user[1], user[2], user[3]))
+                        treeview.insert("", "end", values=(user[0], user[1], user[3], user[4]))
         except Exception as e:
             messagebox.showerror("Error", f"Failed to read users file: {str(e)}")
     else:
