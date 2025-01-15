@@ -76,14 +76,16 @@ def promoteUser():
     
     
     try:
+        lines = []
         with open(usersFile, "r") as file:
-            loadData = file.readlines()
-        with open(usersFile, "w") as file:
-            for line in loadData:
+            for line in file:
                 uData = line.strip().split(";")
                 if len(uData) >= 2 and uData[1] == name and uData[4] == "user":
                     uData[4] = "admin"
-                    file.writelines(uData)
+                lines.append(";".join(uData) + "\n")
+
+        with open(usersFile, "w") as file:
+            file.writelines(lines)
         treeview.delete(selectedUser)
         populateTreeView()
     except Exception as e:
@@ -92,7 +94,36 @@ def promoteUser():
         
 
 def demoteUser():
-    pass
+    selectedUser = treeview.focus()
+    
+    if not selectedUser:
+        messagebox.showerror("Demote", "Select a user to demote." )
+        return
+    
+    data = treeview.item(selectedUser)["values"]
+    name = data[1]
+    
+    confirme = messagebox.askyesno("Confirm Demotion", f"Are you sure you want to demote user '{name}'?")
+    if not confirme:
+        return
+    
+    
+    try:
+        lines = []
+        with open(usersFile, "r") as file:
+            for line in file:
+                uData = line.strip().split(";")
+                if len(uData) >= 2 and uData[1] == name and uData[4] == "admin":
+                    uData[4] = "user"
+                lines.append(";".join(uData) + "\n")
+
+        with open(usersFile, "w") as file:
+            file.writelines(lines)
+        treeview.delete(selectedUser)
+        populateTreeView()
+    except Exception as e:
+        messagebox.showerror("Error demoting user", f"Error demoting user: {str(e)}")
+        return
 
 
 def deleteUser():
