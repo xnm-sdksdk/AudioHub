@@ -7,7 +7,7 @@ saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 
 # main layout
 def mainCatalog():
-    global catalogLayout, selectedCategory, category, genderMusic, genderPodcast
+    global catalogLayout, selectedCategory, category, genderMusic, genderPodcast, term, textDummy
     catalogLayout = tk.Tk()
     catalogLayout.title("Catalog")
     catalogLayout.geometry("800x800")
@@ -51,6 +51,21 @@ def mainCatalog():
     typeCategory['values'] = ('Podcast', 'Music')
     typeCategory.current(1)
     typeCategory.grid(row=2, column=1)
+    
+    # search Box
+    term = tk.StringVar()
+    searchFrame = tk.Frame(catalogLayout, width=500, height=500)
+    searchFrame.grid(row=7, column=0)
+    searchLabel = tk.Label(searchFrame, text="Search...")
+    searchLabel.grid(row=7, column=2)
+    searchEntry = tk.Entry(searchFrame, width=20, textvariable=term)
+    searchEntry.grid(row=7, column=3)
+    searchEntry.focus_set()
+    searchButton = tk.Button(searchFrame, text="Search", command=searchMethod)
+    searchButton.grid(row=7, column=6)
+    textDummy = tk.Text(searchFrame, height=1, width=20)
+    textDummy.insert('1.0', "Search here...")
+    textDummy.grid(row=7, column=3)
     
     # button category
     addCategoryButton = tk.Button(catalogFrame, text="Add Category", command=addCategory)
@@ -129,6 +144,8 @@ def populateGenders():
         messagebox.showerror("Category", "Category not found!")
 
 
+def searchMethod():
+    textDummy.tag_remove('found', '1.0', tk.END)
 
 # run the app
 mainCatalog()
