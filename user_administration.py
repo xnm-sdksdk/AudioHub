@@ -5,10 +5,12 @@ usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fi
 
 # Area destined to manage users
 def mainUserAdministration():
+    # global variables to access from outside of the function
     global mainLayout, treeview
+    # Layout configs
     mainLayout = tk.Tk()
     mainLayout.title("Administration")
-    mainLayout.geometry("1000x1000")
+    mainLayout.geometry("1200x1000")
     mainFrame = tk.Frame(mainLayout, width=1000, height=1000)
     mainFrame.grid(row=0, column=0)
     
@@ -16,14 +18,15 @@ def mainUserAdministration():
     left_frame = tk.Frame(mainFrame)
     left_frame.grid(row=0, column=0, padx=10, pady=1)
     
+    # treeView structure
     paned = PanedWindow(mainFrame, width=7000, height=300, bd="3", relief="sunken")
-    paned.grid(row=1, column=0)
+    paned.grid(row=1, column=0, padx=20, pady=20)
     treeview = ttk.Treeview(paned, selectmode="browse", columns=("id", "name", "register", "type"), show="headings")
     treeview.heading("id", text="ID")
     treeview.heading("name", text="Name")
     treeview.heading("register", text="Register Date")
     treeview.heading("type", text="Type")
-    treeview.column("id", width=100)
+    treeview.column("id", width=300)
     treeview.column("name", anchor=tk.W, width=200)
     treeview.column("register", width=300)
     treeview.column("type", width=100)
@@ -42,7 +45,8 @@ def mainUserAdministration():
     deleteButtonButton = tk.Button(right_frame, text="Delete User", command=deleteUser)
     deleteButtonButton.grid(row=2, column=8, pady=5, padx=15)
 
-            
+
+# Function to load into the treeView the data
 def populateTreeView():
     for item in treeview.get_children():
         treeview.delete(item)
@@ -58,8 +62,9 @@ def populateTreeView():
             messagebox.showerror("Error", f"Failed to read users file: {str(e)}")
     else:
         messagebox.showerror("Error", "Users file not found")
-    
-    
+
+
+# function to promote the user from type user to type admin    
 def promoteUser():
     selectedUser = treeview.focus()
     
@@ -93,6 +98,8 @@ def promoteUser():
         return
         
 
+
+# function to demore the user from type admin to type user
 def demoteUser():
     selectedUser = treeview.focus()
     
@@ -125,7 +132,7 @@ def demoteUser():
         messagebox.showerror("Error demoting user", f"Error demoting user: {str(e)}")
         return
 
-
+# function to delete user
 def deleteUser():
     selectedUser = treeview.focus()
     
