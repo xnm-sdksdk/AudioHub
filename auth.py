@@ -91,7 +91,7 @@ def createAccount():
 
     try:
         with open(authFile, "a") as write:
-            data = f"{uuid.uuid4()};{name};{password};{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')};user\n"
+            data = f"{uuid.uuid4()};{name};{password};{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')};user;\n"
             write.write(data)
         messagebox.showinfo("Register", "Account created successfully!")
         return        

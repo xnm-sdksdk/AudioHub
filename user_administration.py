@@ -33,10 +33,10 @@ def mainUserAdministration():
     right_frame = tk.Frame(mainFrame)
     right_frame.grid(row=1, column=1, padx=10, pady=10)
     
-    promoteAdminButton = tk.Button(right_frame, text="Promote User")
+    promoteAdminButton = tk.Button(right_frame, text="Promote User", command=promoteUser)
     promoteAdminButton.grid(row=0, column=8, pady=5, padx=15)
         
-    demoteUserButton = tk.Button(right_frame, text="Demote User")
+    demoteUserButton = tk.Button(right_frame, text="Demote User", command=demoteUser)
     demoteUserButton.grid(row=1, column=8, pady=5, padx=15)
                 
     deleteButtonButton = tk.Button(right_frame, text="Delete User", command=deleteUser)
@@ -61,8 +61,35 @@ def populateTreeView():
     
     
 def promoteUser():
-    pass
-
+    selectedUser = treeview.focus()
+    
+    if not selectedUser:
+        messagebox.showerror("Promote", "Select a user to promote." )
+        return
+    
+    data = treeview.item(selectedUser)["values"]
+    name = data[1]
+    
+    confirme = messagebox.askyesno("Confirm Promotion", f"Are you sure you want to promote user '{name}'?")
+    if not confirme:
+        return
+    
+    
+    try:
+        with open(usersFile, "r") as file:
+            loadData = file.readlines()
+        with open(usersFile, "w") as file:
+            for line in loadData:
+                uData = line.strip().split(";")
+                if len(uData) >= 2 and uData[1] == name and uData[4] == "user":
+                    uData[4] = "admin"
+                    file.writelines(uData)
+        treeview.delete(selectedUser)
+        populateTreeView()
+    except Exception as e:
+        messagebox.showerror("Error promoting user", f"Error promoting user: {str(e)}")
+        return
+        
 
 def demoteUser():
     pass
@@ -76,7 +103,7 @@ def deleteUser():
         return
     
     data = treeview.item(selectedUser)["values"]
-    name = data[0]
+    name = data[1]
     
     confirme = messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete user '{name}'?")
     if not confirme:
@@ -88,13 +115,14 @@ def deleteUser():
         with open(usersFile, "w") as file:
             for line in loadData:
                 uData = line.strip().split(";")
-                if len(uData) >= 2 and uData[0] != name:
+                if len(uData) >= 2 and uData[1] != name:
                     file.write(line)
         treeview.delete(selectedUser)
         populateTreeView()
         messagebox.showinfo("User deleted", f"User {name}, deleted successfully.")
     except Exception as e:
         messagebox.showerror("Error deleting user", f"Error deleting user: {str(e)}")
+        return
             
 
 mainUserAdministration()
