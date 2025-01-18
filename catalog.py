@@ -77,26 +77,45 @@ def mainCatalog():
     addResourceButton.grid(row=4, column=3)
 
     # # button Like Resource
-    # likeResourceButton = tk.Button(catalogLayout, text="Like Resource", command=likeResource)
-    # likeResourceButton.grid(row=1, column=0)
+    likeResourceButton = tk.Button(catalogLayout, text="Like Resource", command=likeResource)
+    likeResourceButton.grid(row=1, column=0)
 
     # # button comment Resource
-    # commentResourceButton = tk.Button(catalogLayout, text="Comment Resource", command=commentResource)
-    # commentResourceButton.grid(row=1, column=0)
+    commentResourceButton = tk.Button(catalogLayout, text="Comment Resource", command=commentResource)
+    commentResourceButton.grid(row=1, column=0)
 
     # # button favorites
-    # addToFavoritesButton = tk.Button(catalogLayout, text="Add To Favorites", command=addToFavorites)
-    # addToFavoritesButton.grid(row=1, column=0)
+    addToFavoritesButton = tk.Button(catalogLayout, text="Add To Favorites", command=addToFavorites)
+    addToFavoritesButton.grid(row=1, column=0)
+
+    # button my liked songs
+    myLikedSongsButton = tk.Button(catalogLayout, text="My Liked Songs", command=getMyLikedSongs)
+    myLikedSongsButton.grid(row=1, column=0)
 
 
 def addCategory():
     type = selectedCategory.get().lower() + "_categories"
     name = category.get().strip()
+    
+    if not name or not type:
+        messagebox.showerror("Category", "All category fields must be provided.")
+        return
+    
+    if os.path.exists(saveData):
+        try:
+            with open(saveData, 'r') as categoryFile:
+                for categoryIteration in categoryFile:
+                    data = categoryIteration.strip().split(";")
+                    print(data)
+        except Exception as e:
+            messagebox.showerror("Category", "Something went wrong.")
+            return
+    
     if name:
-        if name not in catalogFile[type]:
-            catalogFile[type][name] = []
+        if name not in categoryFile[type]:
+            categoryFile[type][name] = []
             with open(saveData, "a") as saveFile:
-                saveFile.write(catalogFile, saveFile)
+                saveFile.write(categoryFile, saveFile)
             messagebox.showinfo("Category", "Category added!")
             populateGenders()
         else:
@@ -161,6 +180,19 @@ def searchMethod():
             index = lastIndex
         textDummy.tag_config('found', foreground='red')
     searchEntry.focus_set()
+    
+    
+    
+def getMyLikedSongs():
+    pass
+
+def getAllSongs():
+    pass
+
+def getAllPodcasts():
+    pass
+
+
 
 # run the app
 mainCatalog()
