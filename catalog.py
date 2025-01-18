@@ -7,7 +7,7 @@ saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 
 # main layout
 def mainCatalog():
-    global catalogLayout, selectedCategory, category, genderMusic, genderPodcast, term, textDummy
+    global catalogLayout, selectedCategory, category, genderMusic, genderPodcast, term, textDummy, searchEntry
     catalogLayout = tk.Tk()
     catalogLayout.title("Catalog")
     catalogLayout.geometry("800x800")
@@ -63,9 +63,10 @@ def mainCatalog():
     searchEntry.focus_set()
     searchButton = tk.Button(searchFrame, text="Search", command=searchMethod)
     searchButton.grid(row=7, column=6)
+    # testing stage, change to array of songs or albums etc
     textDummy = tk.Text(searchFrame, height=1, width=20)
     textDummy.insert('1.0', "Search here...")
-    textDummy.grid(row=7, column=3)
+    textDummy.grid(row=10, column=3)
     
     # button category
     addCategoryButton = tk.Button(catalogFrame, text="Add Category", command=addCategory)
@@ -146,6 +147,20 @@ def populateGenders():
 
 def searchMethod():
     textDummy.tag_remove('found', '1.0', tk.END)
+    term = searchEntry.get()
+    
+    if term:
+        index = '1.0'
+        while 1:
+            index = textDummy.search(term, index, nocase=1, stopindex=tk.END)
+            if not index:
+                break
+            lastIndex = '%s+%dc' % (index, len(term))
+            
+            textDummy.tag_add('found', index, lastIndex)
+            index = lastIndex
+        textDummy.tag_config('found', foreground='red')
+    searchEntry.focus_set()
 
 # run the app
 mainCatalog()
