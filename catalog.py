@@ -17,16 +17,16 @@ def mainCatalog():
     catalogFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     
     # Category Selection
+    category = tk.StringVar()
     tk.Label(catalogFrame, text="Add a category:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
     category = tk.StringVar()
-    categoryEntry = tk.Entry(catalogFrame, textvariable=category, width=20)
-    categoryEntry.grid(row=0, column=1, padx=5, pady=5)
+    tk.Entry(catalogFrame, textvariable=category, width=20).grid(row=0, column=1, padx=5, pady=5)
     
     # Resource Selection
+    resource = tk.StringVar()
     tk.Label(catalogFrame, text="Add a resource:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
     resource = tk.StringVar()
-    resourceEntry = tk.Entry(catalogFrame, textvariable=resource, width=20)
-    resourceEntry.grid(row=1, column=1, padx=5, pady=5)
+    tk.Entry(catalogFrame, textvariable=resource, width=20).grid(row=1, column=1, padx=5, pady=5)
     
     # Category Dropdown
     tk.Label(catalogFrame, text="Type:").grid(row=2, column=0, sticky="w", padx=5, pady=5)
@@ -61,8 +61,7 @@ def mainCatalog():
     searchEntry.grid(row=0, column=1, padx=5, pady=5)
     searchEntry.focus_set()
     
-    searchButton = tk.Button(searchFrame, text="Search", command=searchMethod)
-    searchButton.grid(row=0, column=2, padx=5, pady=5)
+    tk.Button(searchFrame, text="Search", command=searchMethod).grid(row=0, column=2, padx=5, pady=5)
     
     textDummy = tk.Text(searchFrame, height=1, width=30)
     textDummy.insert('1.0', "Search here...")
@@ -71,6 +70,19 @@ def mainCatalog():
     # Action Buttons
     buttonFrame = tk.Frame(catalogLayout)
     buttonFrame.grid(row=2, column=0, padx=20, pady=10, sticky="nw")
+    
+    # Image Canvas
+    canvasFrame = tk.Frame(catalogLayout)
+    canvasFrame.grid(row=3, column=1, padx=20, pady=20, sticky="nw")
+    canvas = tk.Canvas(canvasFrame, width=400, height=300)
+    canvas.grid(row=0, column=0, padx=10, pady=10)
+    
+    # Resources Frame
+    listboxFrame = tk.Frame(catalogLayout)
+    listboxFrame.grid(row=3, column=0, padx=30, pady=20, sticky="nw")    
+    listbox = tk.Listbox(listboxFrame, height=15, width=40)
+    listbox.grid(row=0, column=0, padx=10, pady=10)
+
     
     tk.Button(catalogFrame, text="Add Category", command=addCategory).grid(row=0, column=2, padx=5, pady=5)
     tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=1, column=2, padx=5, pady=5)
@@ -130,7 +142,7 @@ def addToFavorites():
 def uploadCover():
     global imageCover
     
-    fileTypes = [('Jpg Files', '*.jpg')]
+    fileTypes = [('Jpg Files', '*.jpg'), ('Webp Files', '*.webp')]
     fileName = filedialog.askopenfilename(filetypes = fileTypes)
     imageCover = ImageTk.PhotoImage(file = fileName)
 
