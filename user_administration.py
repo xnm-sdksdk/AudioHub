@@ -35,14 +35,9 @@ def mainUserAdministration():
     right_frame = Frame(mainFrame)
     right_frame.pack(side=RIGHT, fill=Y, padx=10, pady=10)
     
-    promoteAdminButton = Button(right_frame, text="Promote User", command=promoteUser, width=15)
-    promoteAdminButton.pack(pady=5)
-    
-    demoteUserButton = Button(right_frame, text="Demote User", command=demoteUser, width=15)
-    demoteUserButton.pack(pady=5)
-    
-    deleteButtonButton = Button(right_frame, text="Delete User", command=deleteUser, width=15)
-    deleteButtonButton.pack(pady=5)
+    tk.Button(right_frame, text="Promote User", command=promoteUser, width=15).pack(pady=5)
+    tk.Button(right_frame, text="Demote User", command=demoteUser, width=15).pack(pady=5)
+    tk.Button(right_frame, text="Delete User", command=deleteUser, width=15).pack(pady=5)
     
 # Function to load into the TreeView the data
 def populateTreeView():

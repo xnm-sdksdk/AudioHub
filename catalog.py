@@ -8,90 +8,76 @@ saveData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 # main layout
 def mainCatalog():
     global catalogLayout, selectedCategory, category, genderMusic, genderPodcast, term, textDummy, searchEntry
+    
     catalogLayout = tk.Tk()
     catalogLayout.title("Catalog")
-    catalogLayout.geometry("800x800")
-    catalogFrame = tk.Frame(catalogLayout, width=500, height=500)
-    catalogFrame.grid(row=0, column=0)
-
-        
-    # category entry and label
-    categoryLabel = tk.Label(catalogFrame, text="Select a category:")
-    categoryLabel.grid(row=3, column=0)
-
+    catalogLayout.geometry("1000x800")
+    
+    catalogFrame = tk.Frame(catalogLayout)
+    catalogFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
+    
+    # Category Selection
+    tk.Label(catalogFrame, text="Add a category:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
     category = tk.StringVar()
-    categoryEntry = tk.Entry(catalogFrame, width=20, textvariable = category)
-    categoryEntry.grid(row=3, column=1)
-
-    # resource entry and label
-    resourceLabel = tk.Label(catalogFrame, text="Select a resource:")
-    resourceLabel.grid(row=4, column=0)
-
+    categoryEntry = tk.Entry(catalogFrame, textvariable=category, width=20)
+    categoryEntry.grid(row=0, column=1, padx=5, pady=5)
+    
+    # Resource Selection
+    tk.Label(catalogFrame, text="Add a resource:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
     resource = tk.StringVar()
-    resourceEntry = tk.Entry(catalogFrame, width=20, textvariable = resource)
-    resourceEntry.grid(row=4, column=1)
-
-
-    # combobox for the gender of music or podcast
-    selectedComboMusic = tk.StringVar()
-    genderMusic = ttk.Combobox(catalogFrame, textvariable = selectedComboMusic, state="readonly")
-    genderMusic['values'] = ('Music')
-    genderMusic.current(0)
-    genderMusic.grid(row=2, column=3)
-
-    selectedComboPodcast = tk.StringVar()
-    genderPodcast = ttk.Combobox(catalogFrame, textvariable = selectedComboPodcast, state="readonly")
-    genderPodcast['values'] = ('Podcast')
-    genderPodcast.current(0)
-    genderPodcast.grid(row=2, column=4)
-
-    # combobox for categories selection
+    resourceEntry = tk.Entry(catalogFrame, textvariable=resource, width=20)
+    resourceEntry.grid(row=1, column=1, padx=5, pady=5)
+    
+    # Category Dropdown
+    tk.Label(catalogFrame, text="Type:").grid(row=2, column=0, sticky="w", padx=5, pady=5)
     selectedCategory = tk.StringVar()
-    typeCategory = ttk.Combobox(catalogFrame, textvariable=selectedCategory)
+    typeCategory = ttk.Combobox(catalogFrame, textvariable=selectedCategory, state="readonly", width=18)
     typeCategory['values'] = ('Podcast', 'Music')
     typeCategory.current(1)
-    typeCategory.grid(row=2, column=1)
+    typeCategory.grid(row=2, column=1, padx=5, pady=5)
     
-    # search Box
+    # Gender Selection (Music & Podcast)
+    tk.Label(catalogFrame, text="Select Genre:").grid(row=3, column=0, sticky="w", padx=5, pady=5)
+    
+    selectedComboMusic = tk.StringVar()
+    genderMusic = ttk.Combobox(catalogFrame, textvariable=selectedComboMusic, state="readonly", width=18)
+    genderMusic['values'] = ('Music',)
+    genderMusic.current(0)
+    genderMusic.grid(row=3, column=1, padx=5, pady=5)
+    
+    selectedComboPodcast = tk.StringVar()
+    genderPodcast = ttk.Combobox(catalogFrame, textvariable=selectedComboPodcast, state="readonly", width=18)
+    genderPodcast['values'] = ('Podcast',)
+    genderPodcast.current(0)
+    genderPodcast.grid(row=3, column=2, padx=5, pady=5)
+    
+    # Search Section
+    searchFrame = tk.Frame(catalogLayout)
+    searchFrame.grid(row=1, column=0, padx=20, pady=10, sticky="nw")
+    
+    tk.Label(searchFrame, text="Search:").grid(row=0, column=0, padx=5, pady=5)
     term = tk.StringVar()
-    searchFrame = tk.Frame(catalogLayout, width=500, height=500)
-    searchFrame.grid(row=7, column=0)
-    searchLabel = tk.Label(searchFrame, text="Search...")
-    searchLabel.grid(row=7, column=2)
-    searchEntry = tk.Entry(searchFrame, width=20, textvariable=term)
-    searchEntry.grid(row=7, column=3)
+    searchEntry = tk.Entry(searchFrame, textvariable=term, width=20)
+    searchEntry.grid(row=0, column=1, padx=5, pady=5)
     searchEntry.focus_set()
-    searchButton = tk.Button(searchFrame, text="Search", command=searchMethod)
-    searchButton.grid(row=7, column=6)
-    # testing stage, change to array of songs or albums etc
-    textDummy = tk.Text(searchFrame, height=1, width=20)
-    textDummy.insert('1.0', "Search here...")
-    textDummy.grid(row=10, column=3)
     
-    # button category
-    addCategoryButton = tk.Button(catalogFrame, text="Add Category", command=addCategory)
-    addCategoryButton.grid(row=3, column=3)
-
-    # # button resource
-    addResourceButton = tk.Button(catalogFrame, text="Add Resource", command=addResource)
-    addResourceButton.grid(row=4, column=3)
-
-    # # button Like Resource
-    likeResourceButton = tk.Button(catalogLayout, text="Like Resource", command=likeResource)
-    likeResourceButton.grid(row=1, column=0)
-
-    # # button comment Resource
-    commentResourceButton = tk.Button(catalogLayout, text="Comment Resource", command=commentResource)
-    commentResourceButton.grid(row=1, column=0)
-
-    # # button favorites
-    addToFavoritesButton = tk.Button(catalogLayout, text="Add To Favorites", command=addToFavorites)
-    addToFavoritesButton.grid(row=1, column=0)
-
-    # button my liked songs
-    myLikedSongsButton = tk.Button(catalogLayout, text="My Liked Songs", command=getMyLikedSongs)
-    myLikedSongsButton.grid(row=1, column=0)
-
+    searchButton = tk.Button(searchFrame, text="Search", command=searchMethod)
+    searchButton.grid(row=0, column=2, padx=5, pady=5)
+    
+    textDummy = tk.Text(searchFrame, height=1, width=30)
+    textDummy.insert('1.0', "Search here...")
+    textDummy.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
+    
+    # Action Buttons
+    buttonFrame = tk.Frame(catalogLayout)
+    buttonFrame.grid(row=2, column=0, padx=20, pady=10, sticky="nw")
+    
+    tk.Button(catalogFrame, text="Add Category", command=addCategory).grid(row=0, column=2, padx=5, pady=5)
+    tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=1, column=2, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=1, column=2, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=1, column=3, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Add To Favorites", command=addToFavorites).grid(row=1, column=0, padx=5, pady=5)
+    tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=1, column=1, padx=5, pady=5)
 
 def addCategory():
     type = selectedCategory.get().lower() + "_categories"
@@ -197,7 +183,3 @@ def getAllPodcasts():
 # run the app
 mainCatalog()
 catalogLayout.mainloop()
-
-
-
-

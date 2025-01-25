@@ -19,30 +19,22 @@ def mainAuth():
     userName = tk.StringVar()
     passWord = tk.StringVar()
     
-    # Username and Password Label
-    usernameLabel = tk.Label(authFrame, text="Username")
-    usernameLabel.grid(row=0, column=0, sticky='w', pady=5)
+    # Username and Password Label/Entry
+    tk.Label(authFrame, text="Username").grid(row=0, column=0, sticky='w', pady=5)
+    tk.Entry(authFrame, width=30, textvariable=userName).grid(row=0, column=1, pady=5)
     
-    usernameEntry = tk.Entry(authFrame, width=30, textvariable=userName)
-    usernameEntry.grid(row=0, column=1, pady=5)
-    
-    passwordLabel = tk.Label(authFrame, text="Password")
-    passwordLabel.grid(row=1, column=0, sticky='w', pady=5)
-    
-    passwordEntry = tk.Entry(authFrame, width=30, textvariable=passWord, show="*")
-    passwordEntry.grid(row=1, column=1, pady=5)
+    tk.Label(authFrame, text="Password").grid(row=1, column=0, sticky='w', pady=5)
+    tk.Entry(authFrame, width=30, textvariable=passWord, show="*").grid(row=1, column=1, pady=5)
     
     # Login Frame
     authLoginFrame = tk.Frame(authFrame)
-    loginButton = tk.Button(authLoginFrame, text="Login", command=loginAccount, width=20)
-    loginButton.pack()
+    loginButton = tk.Button(authLoginFrame, text="Login", command=loginAccount, width=20).pack()
     
     # Register Frame
     authRegisterFrame = tk.Frame(authFrame)
-    registerButton = tk.Button(authRegisterFrame, text="Register", command=createAccount, width=20)
-    registerButton.pack()
+    registerButton = tk.Button(authRegisterFrame, text="Register", command=createAccount, width=20).pack()
     
-    # Toggle Buttons
+    #buttons to toggle frame
     toggleRegisterButton = tk.Button(authFrame, text="Go to Register", command=lambda: toggleFrames("Register"))
     toggleRegisterButton.grid(row=3, column=0, columnspan=2, pady=5)
     
@@ -114,6 +106,15 @@ def toggleFrames(buttonType):
         authRegisterFrame.grid(row=2, column=0, columnspan=2, pady=10)
         toggleRegisterButton.grid_remove()
         toggleLoginButton.grid()
+        
+        
+# function to logout the user of his session
+def logout():
+    pass
+
+# function to validate the session of the user
+def validateSession():
+    pass
 
 # Run the Application
 mainAuth()
