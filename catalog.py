@@ -78,6 +78,7 @@ def mainCatalog():
     tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=1, column=3, padx=5, pady=5)
     tk.Button(buttonFrame, text="Add To Favorites", command=addToFavorites).grid(row=1, column=0, padx=5, pady=5)
     tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=1, column=1, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Upload Cover", command=uploadCover).grid(row=1, column=4, padx=5, pady=5)
 
 def addCategory():
     type = selectedCategory.get().lower() + "_categories"
@@ -125,6 +126,13 @@ def commentResource():
 
 def addToFavorites():
     pass
+
+def uploadCover():
+    global imageCover
+    
+    fileTypes = [('Jpg Files', '*.jpg')]
+    fileName = filedialog.askopenfilename(filetypes = fileTypes)
+    imageCover = ImageTk.PhotoImage(file = fileName)
 
 
 def readGenders():
