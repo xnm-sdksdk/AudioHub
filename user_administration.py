@@ -5,71 +5,67 @@ usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fi
 
 # Area destined to manage users
 def mainUserAdministration():
-    # global variables to access from outside of the function
     global mainLayout, treeview
-    # Layout configs
-    mainLayout = tk.Tk()
+    
+    mainLayout = Tk()
     mainLayout.title("Administration")
-    mainLayout.geometry("1200x1000")
-    mainFrame = tk.Frame(mainLayout, width=1000, height=1000)
-    mainFrame.grid(row=0, column=0)
+    mainLayout.geometry("800x600")
+    mainLayout.resizable(False, False)
     
-        
-    left_frame = tk.Frame(mainFrame)
-    left_frame.grid(row=0, column=0, padx=10, pady=1)
+    mainFrame = Frame(mainLayout, padx=10, pady=10)
+    mainFrame.pack(fill=BOTH, expand=True)
     
-    # treeView structure
-    paned = PanedWindow(mainFrame, width=7000, height=300, bd="3", relief="sunken")
-    paned.grid(row=1, column=0, padx=20, pady=20)
-    treeview = ttk.Treeview(paned, selectmode="browse", columns=("id", "name", "register", "type"), show="headings")
+    # Left Frame
+    left_frame = Frame(mainFrame)
+    left_frame.pack(side=LEFT, fill=BOTH, expand=True, padx=10, pady=10)
+    
+    # TreeView Structure
+    treeview = ttk.Treeview(left_frame, selectmode="browse", columns=("id", "name", "register", "type"), show="headings")
     treeview.heading("id", text="ID")
     treeview.heading("name", text="Name")
     treeview.heading("register", text="Register Date")
     treeview.heading("type", text="Type")
-    treeview.column("id", width=300)
-    treeview.column("name", anchor=tk.W, width=200)
-    treeview.column("register", width=300)
+    treeview.column("id", width=100)
+    treeview.column("name", anchor=W, width=150)
+    treeview.column("register", width=200)
     treeview.column("type", width=100)
-    treeview.grid(row=2, column=0, padx=0)
+    treeview.pack(fill=BOTH, expand=True, padx=5, pady=5)
     
+    # Right Frame
+    right_frame = Frame(mainFrame)
+    right_frame.pack(side=RIGHT, fill=Y, padx=10, pady=10)
     
-    right_frame = tk.Frame(mainFrame)
-    right_frame.grid(row=1, column=1, padx=10, pady=10)
+    promoteAdminButton = Button(right_frame, text="Promote User", command=promoteUser, width=15)
+    promoteAdminButton.pack(pady=5)
     
-    promoteAdminButton = tk.Button(right_frame, text="Promote User", command=promoteUser)
-    promoteAdminButton.grid(row=0, column=8, pady=5, padx=15)
-        
-    demoteUserButton = tk.Button(right_frame, text="Demote User", command=demoteUser)
-    demoteUserButton.grid(row=1, column=8, pady=5, padx=15)
-                
-    deleteButtonButton = tk.Button(right_frame, text="Delete User", command=deleteUser)
-    deleteButtonButton.grid(row=2, column=8, pady=5, padx=15)
-
-
-# Function to load into the treeView the data
+    demoteUserButton = Button(right_frame, text="Demote User", command=demoteUser, width=15)
+    demoteUserButton.pack(pady=5)
+    
+    deleteButtonButton = Button(right_frame, text="Delete User", command=deleteUser, width=15)
+    deleteButtonButton.pack(pady=5)
+    
+# Function to load into the TreeView the data
 def populateTreeView():
     for item in treeview.get_children():
         treeview.delete(item)
-        
+    
     if os.path.exists(usersFile):
         try:
             with open(usersFile, "r") as file:
                 for line in file:
                     user = line.strip().split(";")
-                    if len(user) >= 2:
+                    if len(user) >= 4:
                         treeview.insert("", "end", values=(user[0], user[1], user[3], user[4]))
         except Exception as e:
             messagebox.showerror("Error", f"Failed to read users file: {str(e)}")
     else:
         messagebox.showerror("Error", "Users file not found")
 
-
-# function to promote the user from type user to type admin    
+# Function to promote user
 def promoteUser():
     selectedUser = treeview.focus()
-    
     if not selectedUser:
-        messagebox.showerror("Promote", "Select a user to promote." )
+        messagebox.showerror("Promote", "Select a user to promote.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -79,32 +75,26 @@ def promoteUser():
     if not confirme:
         return
     
-    
     try:
         lines = []
         with open(usersFile, "r") as file:
             for line in file:
                 uData = line.strip().split(";")
-                if len(uData) >= 2 and uData[1] == name and uData[4] == "user":
+                if len(uData) >= 5 and uData[1] == name and uData[4] == "user":
                     uData[4] = "admin"
                 lines.append(";".join(uData) + "\n")
 
         with open(usersFile, "w") as file:
             file.writelines(lines)
-        treeview.delete(selectedUser)
         populateTreeView()
     except Exception as e:
-        messagebox.showerror("Error promoting user", f"Error promoting user: {str(e)}")
-        return
-        
+        messagebox.showerror("Error", f"Error promoting user: {str(e)}")
 
-
-# function to demore the user from type admin to type user
+# Function to demote user
 def demoteUser():
     selectedUser = treeview.focus()
-    
     if not selectedUser:
-        messagebox.showerror("Demote", "Select a user to demote." )
+        messagebox.showerror("Demote", "Select a user to demote.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -114,30 +104,26 @@ def demoteUser():
     if not confirme:
         return
     
-    
     try:
         lines = []
         with open(usersFile, "r") as file:
             for line in file:
                 uData = line.strip().split(";")
-                if len(uData) >= 2 and uData[1] == name and uData[4] == "admin":
+                if len(uData) >= 5 and uData[1] == name and uData[4] == "admin":
                     uData[4] = "user"
                 lines.append(";".join(uData) + "\n")
 
         with open(usersFile, "w") as file:
             file.writelines(lines)
-        treeview.delete(selectedUser)
         populateTreeView()
     except Exception as e:
-        messagebox.showerror("Error demoting user", f"Error demoting user: {str(e)}")
-        return
+        messagebox.showerror("Error", f"Error demoting user: {str(e)}")
 
-# function to delete user
+# Function to delete user
 def deleteUser():
     selectedUser = treeview.focus()
-    
     if not selectedUser:
-        messagebox.showerror("Delete", "Select a user to delete." )
+        messagebox.showerror("Delete", "Select a user to delete.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -153,16 +139,13 @@ def deleteUser():
         with open(usersFile, "w") as file:
             for line in loadData:
                 uData = line.strip().split(";")
-                if len(uData) >= 2 and uData[1] != name:
+                if len(uData) >= 5 and uData[1] != name:
                     file.write(line)
-        treeview.delete(selectedUser)
         populateTreeView()
-        messagebox.showinfo("User deleted", f"User {name}, deleted successfully.")
+        messagebox.showinfo("User deleted", f"User {name} deleted successfully.")
     except Exception as e:
-        messagebox.showerror("Error deleting user", f"Error deleting user: {str(e)}")
-        return
-            
+        messagebox.showerror("Error", f"Error deleting user: {str(e)}")
 
 mainUserAdministration()
-populateTreeView() 
+populateTreeView()
 mainLayout.mainloop()
