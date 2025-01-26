@@ -50,7 +50,7 @@ def loginAccount():
     password = passWord.get()
     
     if not username or not password:
-        messagebox.showerror("Login", "Username or Password not filled!")
+        messagebox.showwarning("Login", "Username or Password not filled!")
         return
     
     if os.path.exists(authFile):
@@ -71,7 +71,7 @@ def createAccount():
     password = passWord.get()
     
     if not name or not password:
-        messagebox.showerror("Register", "Username or Password not filled!")
+        messagebox.showwarning("Register", "Username or Password not filled!")
         return
     
     if os.path.exists(authFile):
@@ -90,6 +90,8 @@ def createAccount():
         with open(authFile, "a") as write:
             data = f"{uuid.uuid4()};{name};{password};{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')};user;\n"
             write.write(data)
+            userName.set("")
+            passWord.set("")
         messagebox.showinfo("Register", "Account created successfully!")
     except Exception as e:
         messagebox.showerror("Register", f"Error creating account: {str(e)}")

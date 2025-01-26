@@ -1,5 +1,6 @@
 from imports import *
 from tkinter import *
+from categories_administration import mainCategoriesAdministration
 
 usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
@@ -8,7 +9,7 @@ def mainUserAdministration():
     global mainLayout, treeview
     
     mainLayout = Tk()
-    mainLayout.title("Administration")
+    mainLayout.title("User Administration")
     mainLayout.geometry("800x600")
     mainLayout.resizable(False, False)
     
@@ -38,6 +39,7 @@ def mainUserAdministration():
     tk.Button(right_frame, text="Promote User", command=promoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Demote User", command=demoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Delete User", command=deleteUser, width=15).pack(pady=5)
+    tk.Button(right_frame, text="Manage Categories", command=manageCategories, width=15).pack(pady=5)
     
 # Function to load into the TreeView the data
 def populateTreeView():
@@ -60,7 +62,7 @@ def populateTreeView():
 def promoteUser():
     selectedUser = treeview.focus()
     if not selectedUser:
-        messagebox.showerror("Promote", "Select a user to promote.")
+        messagebox.showwarning("Promote User", "Select a user to promote.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -89,7 +91,7 @@ def promoteUser():
 def demoteUser():
     selectedUser = treeview.focus()
     if not selectedUser:
-        messagebox.showerror("Demote", "Select a user to demote.")
+        messagebox.showwarning("Demote User", "Select a user to demote.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -118,7 +120,7 @@ def demoteUser():
 def deleteUser():
     selectedUser = treeview.focus()
     if not selectedUser:
-        messagebox.showerror("Delete", "Select a user to delete.")
+        messagebox.showwarning("Delete User", "Select a user to delete.")
         return
     
     data = treeview.item(selectedUser)["values"]
@@ -140,6 +142,12 @@ def deleteUser():
         messagebox.showinfo("User deleted", f"User {name} deleted successfully.")
     except Exception as e:
         messagebox.showerror("Error", f"Error deleting user: {str(e)}")
+        return
+def manageCategories():
+    global mainLayout
+    mainLayout.destroy()
+    mainCategoriesAdministration()
+
 
 mainUserAdministration()
 populateTreeView()
