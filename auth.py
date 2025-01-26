@@ -7,6 +7,10 @@ authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 def mainAuth():
     global authLayout, userName, passWord, authLoginFrame, authRegisterFrame, toggleLoginButton, toggleRegisterButton
     
+    if validateSession():
+        mainCatalog()
+        return
+    
     authLayout = tk.Tk()
     authLayout.title("Authentication")
     authLayout.geometry("400x300")

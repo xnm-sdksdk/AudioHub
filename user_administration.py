@@ -2,6 +2,7 @@ from imports import *
 from tkinter import *
 from categories_administration import mainCategoriesAdministration
 from auth import validatePermissions
+from usageStatistics import mainLayoutUsageStatistics
 
 usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
@@ -41,6 +42,7 @@ def mainUserAdministration():
     tk.Button(right_frame, text="Demote User", command=demoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Delete User", command=deleteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Manage Categories", command=lambda: manageCategories(), width=15).pack(pady=5)
+    tk.Button(right_frame, text="User Statistics", command=lambda: usageStatistics(), width=15).pack(pady=5)
     
 # Function to load into the TreeView the data
 def populateTreeView():
@@ -56,8 +58,10 @@ def populateTreeView():
                         treeview.insert("", "end", values=(user[0], user[1], user[3], user[4]))
         except Exception as e:
             messagebox.showerror("Error", f"Failed to read users file: {str(e)}")
+            return
     else:
         messagebox.showerror("Error", "Users file not found")
+        return
 
 # Function to promote user
 def promoteUser():
@@ -154,6 +158,10 @@ def manageCategories():
     else:
         messagebox.showerror("Permission Error", "Error: You don't have permission to access.")
         return
+    
+    
+def usageStatistics():
+    mainLayout.destroy()
         
 
 mainUserAdministration()

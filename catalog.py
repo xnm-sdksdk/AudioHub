@@ -12,7 +12,7 @@ likesData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fi
 
 # main layout
 def mainCatalog():
-    global catalogLayout, selectedCategory, category, genderMusic, genderPodcast, term, textDummy, searchEntry, canvas, categoryValue
+    global catalogLayout, selectedCategory, genderMusic, genderPodcast, term, textDummy, searchEntry, combobox, canvas, categoryValue, typeCategory, selectedCategory
     
     catalogLayout = tk.Tk()
     catalogLayout.title("Catalog")
@@ -21,16 +21,11 @@ def mainCatalog():
     catalogFrame = tk.Frame(catalogLayout)
     catalogFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     
-    # Category Selection
-    category = tk.StringVar()
-    tk.Label(catalogFrame, text="Add a category:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
-    tk.Entry(catalogFrame, textvariable=category, width=20).grid(row=0, column=1, padx=5, pady=5)
-    
     
     # Select Category
     categoryValue = tk.StringVar()
     tk.Label(catalogFrame, text="Select a category:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
-    ttk.Combobox(catalogFrame, textvariable=categoryValue, width=20).grid(row=1, column=1, padx=5, pady=5)
+    combobox = ttk.Combobox(catalogFrame, textvariable=categoryValue, width=20).grid(row=1, column=1, padx=5, pady=5)
     
     # Resource Selection
     resource = tk.StringVar()
@@ -89,7 +84,6 @@ def mainCatalog():
     canvas = tk.Canvas(canvasFrame, width=300, height=300, bg="lightgray", relief="solid", borderwidth=1)
     canvas.grid(row=0, column=0, padx=5, pady=5)
     
-    tk.Button(catalogFrame, text="Add Category", command=addCategory).grid(row=0, column=2, padx=5, pady=5)
     tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=1, column=6, padx=25, pady=5)
     tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=1, column=2, padx=5, pady=5)
     tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=1, column=3, padx=5, pady=5)
@@ -202,32 +196,28 @@ def updateGenres():
     pass
 
 def readGenders():
-    categories = []
-    genres = []
-    
     if os.path.exists(categoryData):
         try:
             with open(categoryData, "r") as file:
                 for line in file:
-                    category, genre = line.split().split("=")
-                    categories.append(category)
-                    genres.append(genre.split(";"))
+                    genderMusic.insert(tk.END, line.strip())
         except Exception as e:
             messagebox.showerror("Genres", "Something went wrong while reading genres!")
-    return categories, genres
+            return
 
 
-def populateGenders():
-    selected = selectedCategory.get().lower()
-    genres = readGenders()
+# def populateGenders():
+#     selected = selectedCategory.get().lower()
+#     genres = readGenders()
     
-    if selected == "music":
-        genderMusic["values"] = genres["music"]
-    else:
-        messagebox.showerror("Category", "Category not found!")
+#     if selected == "music":
+#         genderMusic["values"] = genres["music"]
+#     else:
+#         messagebox.showerror("Category", "Category not found!")
 
 
 
 # run the app
 mainCatalog()
+readGenders()
 catalogLayout.mainloop()
