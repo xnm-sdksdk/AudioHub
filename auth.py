@@ -61,6 +61,9 @@ def loginAccount():
                     data = user.strip().split(";")
                     if len(data) >= 3 and data[1] == username and data[2] == password:
                         messagebox.showinfo("Login", "Login Successful!")
+                        os.environ["USERNAME_SESSION"] = data[1]
+                        os.environ["ROLE_SESSION"] = data[4]
+                        os.environ["USER_UUID"] = data[0]
                         authLayout.destroy()
                         mainCatalog()
                         return
@@ -96,6 +99,8 @@ def createAccount():
             userName.set("")
             passWord.set("")
         messagebox.showinfo("Register", "Account created successfully!")
+        toggleFrames("Login")
+        return
     except Exception as e:
         messagebox.showerror("Register", f"Error creating account: {str(e)}")
 
@@ -115,11 +120,22 @@ def toggleFrames(buttonType):
         
 # function to logout the user of his session
 def logout():
-    pass
+    os.environ.pop("USERNAME_SESSION", None)
+    os.environ.pop("ROLE_SESSION", None)
+    os.environ.pop("USER_UUID", None)
+    
+    messagebox.showinfo("Logout", "You have been logged out successfully!")
+    mainAuth()
+    return
 
 # function to validate the session of the user
 def validateSession():
-    pass
+    username = os.getenv("USERNAME_SESSION")
+    user_uuid = os.getenv("USER_UUID")
+    if username and user_uuid:
+        return True
+    else:
+        return False
 
 def validatePermissions():
     try:
@@ -133,7 +149,7 @@ def validatePermissions():
     except Exception as e:
         messagebox.showerror("Permission", f"Error reading authentication file: {str(e)}")
         return
-
+    
 # Run the Application
 mainAuth()
 authLayout.mainloop()
