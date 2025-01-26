@@ -44,6 +44,9 @@ def mainUserAdministration():
     tk.Button(right_frame, text="Manage Categories", command=lambda: manageCategories(), width=15).pack(pady=5)
     tk.Button(right_frame, text="User Statistics", command=lambda: usageStatistics(), width=15).pack(pady=5)
     
+    mainLayout.mainloop()
+
+    
 # Function to load into the TreeView the data
 def populateTreeView():
     for item in treeview.get_children():
@@ -166,4 +169,3 @@ def usageStatistics():
 
 mainUserAdministration()
 populateTreeView()
-mainLayout.mainloop()

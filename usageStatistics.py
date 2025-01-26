@@ -26,6 +26,8 @@ def mainLayoutUsageStatistics():
     tk.Label(mainFrame, text="Music with Most Likes:", font=40).grid(row=10, column=0, sticky="w")
     tk.Label(mainFrame, text="Music with Best Rating:", font=40).grid(row=12, column=0, sticky="w")
 
+    userLayout.mainloop()
+    
 def numberOfUsers():
     if os.path.exists(usersData):
         try:
@@ -76,4 +78,3 @@ def musicWithBestRating():
 
 
 mainLayoutUsageStatistics()
-userLayout.mainloop()

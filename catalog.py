@@ -1,5 +1,6 @@
 # imports
 from imports import *
+from tkinter import *
 
 # file to hold the data
 categoryData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/categories.txt"
@@ -21,79 +22,55 @@ def mainCatalog():
     catalogFrame = tk.Frame(catalogLayout)
     catalogFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     
-    
     # Select Category
     categoryValue = tk.StringVar()
-    tk.Label(catalogFrame, text="Select a category:").grid(row=1, column=0, sticky="w", padx=5, pady=5)
-    combobox = ttk.Combobox(catalogFrame, textvariable=categoryValue, width=20).grid(row=1, column=1, padx=5, pady=5)
+    tk.Label(catalogFrame, text="Select a category:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+    combobox = ttk.Combobox(catalogFrame, textvariable=categoryValue, width=20)
+    combobox.grid(row=0, column=1, padx=5, pady=5)
     
     # Resource Selection
     resource = tk.StringVar()
-    tk.Label(catalogFrame, text="Add a resource:").grid(row=1, column=2, sticky="w", padx=50, pady=5)
-    tk.Entry(catalogFrame, textvariable=resource, width=20).grid(row=1, column=3, padx=5, pady=5)
-    
-    # Category Dropdown
-    tk.Label(catalogFrame, text="Type:").grid(row=2, column=0, sticky="w", padx=5, pady=5)
-    selectedCategory = tk.StringVar()
-    typeCategory = ttk.Combobox(catalogFrame, textvariable=selectedCategory, state="readonly", width=18)
-    typeCategory['values'] = ('Podcast', 'Music')
-    typeCategory.current(1)
-    typeCategory.grid(row=2, column=1, padx=5, pady=5)
-    
-    # Gender Selection (Music & Podcast)
-    tk.Label(catalogFrame, text="Select Genre:").grid(row=3, column=0, sticky="w", padx=5, pady=5)
-    
-    genderMusic = ttk.Combobox(catalogFrame, state="normal", width=18)
-    genderMusic.grid(row=3, column=1, padx=5, pady=5)
-    
-    genderPodcast = ttk.Combobox(catalogFrame, state="disable", width=18)
-    genderPodcast.grid(row=3, column=2, padx=5, pady=5)
-    
-    typeCategory.bind('<<ComboboxSelected>>', updateGenres)
-    updateGenres()
-    
-    # Search Section
-    searchFrame = tk.Frame(catalogLayout)
-    searchFrame.grid(row=1, column=0, padx=20, pady=10, sticky="nw")
-    
-    tk.Label(searchFrame, text="Search:").grid(row=0, column=0, padx=5, pady=5)
-    term = tk.StringVar()
-    searchEntry = tk.Entry(searchFrame, textvariable=term, width=20)
-    searchEntry.grid(row=0, column=1, padx=5, pady=5)
-    searchEntry.focus_set()
-    
-    tk.Button(searchFrame, text="Search", command=searchMethod).grid(row=0, column=2, padx=5, pady=5)
-    
-    textDummy = tk.Text(searchFrame, height=1, width=30)
-    textDummy.insert('1.0', "Search here...")
-    textDummy.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
+    tk.Label(catalogFrame, text="Add a resource:").grid(row=0, column=2, sticky="w", padx=5, pady=5)
+    tk.Entry(catalogFrame, textvariable=resource, width=20).grid(row=0, column=3, padx=5, pady=5)
+           
+    # Add Resource Button
+    tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=0, column=4, padx=25, pady=5)
     
     buttonFrame = tk.Frame(catalogLayout)
-    buttonFrame.grid(row=2, column=0, padx=20, pady=10, sticky="nw")
+    buttonFrame.grid(row=1, column=0, padx=20, pady=10, sticky="nw")
+    
+    # Align buttons within buttonFrame
+    tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=0, column=0, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=0, column=1, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Add To Liked Songs", command=addToFavoritesSongs).grid(row=0, column=2, padx=5, pady=5)
+    tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=0, column=3, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Upload Cover", command=uploadCover).grid(row=0, column=4, padx=5, pady=5)
     
     contentFrame = tk.Frame(catalogLayout)
-    contentFrame.grid(row=3, column=0, padx=10, pady=20, sticky="nw")  
+    contentFrame.grid(row=2, column=0, padx=10, pady=20, sticky="nw")
     
-    listboxFrame = tk.Frame(contentFrame)
-    listboxFrame.grid(row=0, column=0, padx=5, pady=5, sticky="w")  
-    listbox = tk.Listbox(listboxFrame, height=15, width=40)
-    listbox.grid(row=0, column=0, padx=5, pady=5)
+    # Treeview for displaying resources
+    treeview = ttk.Treeview(contentFrame, selectmode="browse", columns=["category", "resource"], show="headings",)
+    treeview.heading("category", text="Category")
+    treeview.heading("resource", text="Resource")
+    treeview.column("category", width=100)
+    treeview.column("resource", width=100)
+    treeview.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
     
+    # Canvas for cover upload or images
     canvasFrame = tk.Frame(contentFrame)
-    canvasFrame.grid(row=0, column=2, padx=50, pady=5, sticky="w")
+    canvasFrame.grid(row=0, column=1, padx=50, pady=5, sticky="nw")
     canvas = tk.Canvas(canvasFrame, width=300, height=300, bg="lightgray", relief="solid", borderwidth=1)
     canvas.grid(row=0, column=0, padx=5, pady=5)
     
-    tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=1, column=6, padx=25, pady=5)
-    tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=1, column=2, padx=5, pady=5)
-    tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=1, column=3, padx=5, pady=5)
-    tk.Button(buttonFrame, text="Add To Favorites", command=addToFavorites).grid(row=1, column=0, padx=5, pady=5)
-    tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=1, column=1, padx=5, pady=5)
-    tk.Button(buttonFrame, text="Upload Cover", command=uploadCover).grid(row=1, column=4, padx=5, pady=5)
-
+    
+    readGenders()
+    catalogLayout.mainloop()
+    
 def addCategory():
-    type = selectedCategory.get().lower() + "_categories"
-    name = category.get().strip()
+    pass
+    # type = selectedCategory.get().lower() + "_categories"
+    # name = category.get().strip()
     
     # if not name or not type:
     #     messagebox.showerror("Category", "All category fields must be provided.")
@@ -135,7 +112,7 @@ def commentResource():
     pass
 
 
-def addToFavorites():
+def addToFavoritesSongs():
     pass
 
 def uploadCover():
@@ -162,25 +139,6 @@ def uploadCover():
     except Exception as e:
         messagebox.showerror("Error", f"Something went wrong: {e}")
 
-
-def searchMethod():
-    textDummy.tag_remove('found', '1.0', tk.END)
-    term = searchEntry.get()
-    
-    if term:
-        index = '1.0'
-        while 1:
-            index = textDummy.search(term, index, nocase=1, stopindex=tk.END)
-            if not index:
-                break
-            lastIndex = '%s+%dc' % (index, len(term))
-            
-            textDummy.tag_add('found', index, lastIndex)
-            index = lastIndex
-        textDummy.tag_config('found', foreground='red')
-    searchEntry.focus_set()
-    
-    
     
 def getMyLikedSongs():
     pass
@@ -200,7 +158,9 @@ def readGenders():
         try:
             with open(categoryData, "r") as file:
                 for line in file:
-                    genderMusic.insert(tk.END, line.strip())
+                    clean_line = line.strip().split(";")[1]
+                    if clean_line not in combobox['values']:
+                        combobox['values'] = (*combobox['values'], clean_line)
         except Exception as e:
             messagebox.showerror("Genres", "Something went wrong while reading genres!")
             return
@@ -219,5 +179,3 @@ def readGenders():
 
 # run the app
 mainCatalog()
-readGenders()
-catalogLayout.mainloop()

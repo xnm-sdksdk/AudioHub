@@ -7,10 +7,6 @@ authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/fil
 def mainAuth():
     global authLayout, userName, passWord, authLoginFrame, authRegisterFrame, toggleLoginButton, toggleRegisterButton
     
-    if validateSession():
-        mainCatalog()
-        return
-    
     authLayout = tk.Tk()
     authLayout.title("Authentication")
     authLayout.geometry("400x300")
@@ -23,7 +19,6 @@ def mainAuth():
     # Entry Variables
     userName = tk.StringVar()
     passWord = tk.StringVar()
-    
     # Username and Password Label/Entry
     tk.Label(authFrame, text="Username").grid(row=0, column=0, sticky='w', pady=5)
     tk.Entry(authFrame, width=30, textvariable=userName).grid(row=0, column=1, pady=5)
@@ -46,8 +41,11 @@ def mainAuth():
     toggleLoginButton = tk.Button(authFrame, text="Go to Login", command=lambda: toggleFrames("Login"))
     toggleLoginButton.grid(row=3, column=0, columnspan=2, pady=5)
     
+    
     # Initialize with Login Frame
     toggleFrames("Login")
+    print(f"Initial session check: {os.getenv('USERNAME_SESSION')}")     
+    authLayout.mainloop()
     
 # Login Method
 def loginAccount():
@@ -68,6 +66,9 @@ def loginAccount():
                         os.environ["USERNAME_SESSION"] = data[1]
                         os.environ["ROLE_SESSION"] = data[4]
                         os.environ["USER_UUID"] = data[0]
+                        
+                        print(f"Session set: {os.getenv('USERNAME_SESSION')}")
+                         
                         authLayout.destroy()
                         mainCatalog()
                         return
@@ -136,6 +137,7 @@ def logout():
 def validateSession():
     username = os.getenv("USERNAME_SESSION")
     user_uuid = os.getenv("USER_UUID")
+    print(f"Session check: {username}, {user_uuid}") 
     if username and user_uuid:
         return True
     else:
@@ -156,4 +158,3 @@ def validatePermissions():
     
 # Run the Application
 mainAuth()
-authLayout.mainloop()
