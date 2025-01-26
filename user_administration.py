@@ -1,6 +1,7 @@
 from imports import *
 from tkinter import *
 from categories_administration import mainCategoriesAdministration
+from auth import validatePermissions
 
 usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
@@ -39,7 +40,7 @@ def mainUserAdministration():
     tk.Button(right_frame, text="Promote User", command=promoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Demote User", command=demoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Delete User", command=deleteUser, width=15).pack(pady=5)
-    tk.Button(right_frame, text="Manage Categories", command=manageCategories, width=15).pack(pady=5)
+    tk.Button(right_frame, text="Manage Categories", command=lambda: manageCategories(), width=15).pack(pady=5)
     
 # Function to load into the TreeView the data
 def populateTreeView():
@@ -86,6 +87,7 @@ def promoteUser():
         populateTreeView()
     except Exception as e:
         messagebox.showerror("Error", f"Error promoting user: {str(e)}")
+        return
 
 # Function to demote user
 def demoteUser():
@@ -143,11 +145,16 @@ def deleteUser():
     except Exception as e:
         messagebox.showerror("Error", f"Error deleting user: {str(e)}")
         return
+    
 def manageCategories():
     global mainLayout
-    mainLayout.destroy()
-    mainCategoriesAdministration()
-
+    if validatePermissions:
+        mainLayout.destroy()
+        mainCategoriesAdministration()
+    else:
+        messagebox.showerror("Permission Error", "Error: You don't have permission to access.")
+        return
+        
 
 mainUserAdministration()
 populateTreeView()

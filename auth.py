@@ -1,4 +1,5 @@
 from imports import *
+from catalog import mainCatalog
 
 authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
@@ -60,6 +61,8 @@ def loginAccount():
                     data = user.strip().split(";")
                     if len(data) >= 3 and data[1] == username and data[2] == password:
                         messagebox.showinfo("Login", "Login Successful!")
+                        authLayout.destroy()
+                        mainCatalog()
                         return
             messagebox.showerror("Login", "User not found!")
         except Exception as e:
@@ -117,6 +120,19 @@ def logout():
 # function to validate the session of the user
 def validateSession():
     pass
+
+def validatePermissions():
+    try:
+        with open(authFile) as file:
+            for line in file:
+                data = line.strip().split(";")
+                if data[4] == "admin":
+                    return True
+        messagebox.showerror("Permission", "Error: You don't have permission to access.")
+        return False
+    except Exception as e:
+        messagebox.showerror("Permission", f"Error reading authentication file: {str(e)}")
+        return
 
 # Run the Application
 mainAuth()
