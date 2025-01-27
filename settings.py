@@ -21,23 +21,23 @@ def mainLayoutSettings():
     settingsLayout.mainloop()
     
 def openCategories():
-    from categories_administration import mainCategoriesAdministration
     from permissions import validatePermissions
     if validatePermissions():
+        from categories_administration import mainCategoriesAdministration
         settingsLayout.destroy()
         mainCategoriesAdministration()     
     
 def openStatistics():
-    from usageStatistics import mainLayoutUsageStatistics
     from permissions import validatePermissions
     if validatePermissions():
+        from usageStatistics import mainLayoutUsageStatistics
         settingsLayout.destroy()
         mainLayoutUsageStatistics()
     
 def openAdmin():    
-    from user_administration import mainUserAdministration
     from permissions import validatePermissions
     if validatePermissions():
+        from user_administration import mainUserAdministration
         settingsLayout.destroy()
         mainUserAdministration()
     
