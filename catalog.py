@@ -33,18 +33,16 @@ def mainCatalog():
     tk.Label(catalogFrame, text="Add a resource:").grid(row=0, column=2, sticky="w", padx=5, pady=5)
     tk.Entry(catalogFrame, textvariable=resource, width=20).grid(row=0, column=3, padx=5, pady=5)
            
-    # Add Resource Button
-    tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=0, column=4, padx=25, pady=5)
-    
+            
     buttonFrame = tk.Frame(catalogLayout)
     buttonFrame.grid(row=1, column=0, padx=20, pady=10, sticky="nw")
     
     # Align buttons within buttonFrame
+    tk.Button(catalogFrame, text="Add Resource", command=addResource).grid(row=0, column=4, padx=25, pady=5)
     tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=0, column=0, padx=5, pady=5)
-    tk.Button(buttonFrame, text="Comment Resource", command=commentResource).grid(row=0, column=1, padx=5, pady=5)
     tk.Button(buttonFrame, text="Add To Liked Songs", command=addToFavoritesSongs).grid(row=0, column=2, padx=5, pady=5)
     tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=0, column=3, padx=5, pady=5)
-    tk.Button(buttonFrame, text="Upload Cover", command=uploadCover).grid(row=0, column=4, padx=5, pady=5)
+    tk.Button(buttonFrame, text="Settings", command=settings).grid(row=0, column=5, padx=5, pady=5)
     
     contentFrame = tk.Frame(catalogLayout)
     contentFrame.grid(row=2, column=0, padx=10, pady=20, sticky="nw")
@@ -56,14 +54,7 @@ def mainCatalog():
     treeview.column("category", width=100)
     treeview.column("resource", width=100)
     treeview.grid(row=0, column=0, padx=5, pady=5, sticky="nw")
-    
-    # Canvas for cover upload or images
-    canvasFrame = tk.Frame(contentFrame)
-    canvasFrame.grid(row=0, column=1, padx=50, pady=5, sticky="nw")
-    canvas = tk.Canvas(canvasFrame, width=300, height=300, bg="lightgray", relief="solid", borderwidth=1)
-    canvas.grid(row=0, column=0, padx=5, pady=5)
-    
-    
+        
     readGenders()
     catalogLayout.mainloop()
     
@@ -108,38 +99,9 @@ def likeResource():
     pass
 
 
-def commentResource():
-    pass
-
-
 def addToFavoritesSongs():
     pass
 
-def uploadCover():
-    global imageCover
-    
-    try:
-        fileTypes = [('Jpg Files', '*.jpg'), ('Webp Files', '*.webp')]
-        fileName = filedialog.askopenfilename(filetypes=fileTypes)
-        
-        if not fileName or os.path.isdir(fileName):
-            messagebox.showerror("Error", "Invalid file selected. Please select an image file.")
-            return
-
-        img = Image.open(fileName)
-        img = img.resize((400, 300))
-        imageCover = ImageTk.PhotoImage(img)
-
-        canvas.delete("all")
-        canvas.create_image(0, 0, anchor="nw", image=imageCover)
-        canvas.image = imageCover
-        
-    except FileNotFoundError:
-        messagebox.showerror("Image", "File not found. Please select a valid image.")
-    except Exception as e:
-        messagebox.showerror("Error", f"Something went wrong: {e}")
-
-    
 def getMyLikedSongs():
     pass
 
@@ -149,9 +111,6 @@ def getAllSongs():
 def getAllPodcasts():
     pass
 
-
-def updateGenres():
-    pass
 
 def readGenders():
     if os.path.exists(categoryData):
@@ -176,6 +135,7 @@ def readGenders():
 #         messagebox.showerror("Category", "Category not found!")
 
 
-
-# run the app
-mainCatalog()
+def settings():
+    from settings import mainLayoutSettings
+    catalogLayout.destroy()
+    mainLayoutSettings()

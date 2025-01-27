@@ -1,12 +1,10 @@
 from imports import *
-from catalog import mainCatalog
 
 authFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
 
 # Authentication Main Layout
 def mainAuth():
     global authLayout, userName, passWord, authLoginFrame, authRegisterFrame, toggleLoginButton, toggleRegisterButton
-    
     authLayout = tk.Tk()
     authLayout.title("Authentication")
     authLayout.geometry("400x300")
@@ -70,7 +68,7 @@ def loginAccount():
                         print(f"Session set: {os.getenv('USERNAME_SESSION')}")
                          
                         authLayout.destroy()
-                        mainCatalog()
+                        openCatalog()
                         return
             messagebox.showerror("Login", "User not found!")
         except Exception as e:
@@ -130,31 +128,13 @@ def logout():
     os.environ.pop("USER_UUID", None)
     
     messagebox.showinfo("Logout", "You have been logged out successfully!")
-    mainAuth()
     return
 
-# function to validate the session of the user
-def validateSession():
-    username = os.getenv("USERNAME_SESSION")
-    user_uuid = os.getenv("USER_UUID")
-    print(f"Session check: {username}, {user_uuid}") 
-    if username and user_uuid:
-        return True
-    else:
-        return False
-
-def validatePermissions():
-    try:
-        with open(authFile) as file:
-            for line in file:
-                data = line.strip().split(";")
-                if data[4] == "admin":
-                    return True
-        messagebox.showerror("Permission", "Error: You don't have permission to access.")
-        return False
-    except Exception as e:
-        messagebox.showerror("Permission", f"Error reading authentication file: {str(e)}")
-        return
+        
+def openCatalog():
+    from catalog import mainCatalog
+    mainCatalog()
     
+
 # Run the Application
 mainAuth()

@@ -1,7 +1,6 @@
 from imports import *
 from tkinter import *
-from categories_administration import mainCategoriesAdministration
-from auth import validatePermissions
+from permissions import validatePermissions
 from usageStatistics import mainLayoutUsageStatistics
 
 usersFile = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/users.txt"
@@ -41,9 +40,10 @@ def mainUserAdministration():
     tk.Button(right_frame, text="Promote User", command=promoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Demote User", command=demoteUser, width=15).pack(pady=5)
     tk.Button(right_frame, text="Delete User", command=deleteUser, width=15).pack(pady=5)
-    tk.Button(right_frame, text="Manage Categories", command=lambda: manageCategories(), width=15).pack(pady=5)
-    tk.Button(right_frame, text="User Statistics", command=lambda: usageStatistics(), width=15).pack(pady=5)
+    tk.Button(right_frame, text="Manage Categories", command=manageCategories, width=15).pack(pady=5)
+    tk.Button(right_frame, text="Back", command=backToSettings, width=15).pack(pady=5)
     
+    populateTreeView()
     mainLayout.mainloop()
 
     
@@ -154,18 +154,14 @@ def deleteUser():
         return
     
 def manageCategories():
-    global mainLayout
-    if validatePermissions:
+    from categories_administration import mainCategoriesAdministration
+    if validatePermissions():
         mainLayout.destroy()
         mainCategoriesAdministration()
-    else:
-        messagebox.showerror("Permission Error", "Error: You don't have permission to access.")
-        return
     
-    
-def usageStatistics():
+def backToSettings():
+    from settings import mainLayoutSettings
     mainLayout.destroy()
-        
+    mainLayoutSettings()
 
 mainUserAdministration()
-populateTreeView()

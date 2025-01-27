@@ -13,18 +13,18 @@ def mainLayoutUsageStatistics():
     global userLayout
     userLayout = tk.Tk()
     userLayout.title("Usage Statistics")
-    userLayout.geometry("1000x800")
+    userLayout.geometry("400x400")
     userLayout.resizable(False, False)
     
     mainFrame = tk.Frame(userLayout, padx=10, pady=10)
     mainFrame.grid(row=0, column=0, padx=20, pady=20, sticky="nw")
     
-    tk.Label(mainFrame, text=f"Number of Users: {numberOfUsers()}", font=40).grid(row=0, column=0, sticky="w")
-    tk.Label(mainFrame, text=f"Number of Categories: {numberOfCategories()}", font=40).grid(row=4, column=0, sticky="w")
-    tk.Label(mainFrame, text=f"Number of Musics: {numberOfMusics()}", font=40).grid(row=6, column=0, sticky="w")
-    tk.Label(mainFrame, text=f"Number of Podcasts: {numberOfPodcasts()}", font=40).grid(row=8, column=0, sticky="w")
-    tk.Label(mainFrame, text="Music with Most Likes:", font=40).grid(row=10, column=0, sticky="w")
-    tk.Label(mainFrame, text="Music with Best Rating:", font=40).grid(row=12, column=0, sticky="w")
+    
+    tk.Button(mainFrame, text="Back", command=backToSettings).grid(row=0, column=0, sticky="w")
+    tk.Label(mainFrame, text=f"Number of Users: {numberOfUsers()}", font=40).grid(row=1, column=0, sticky="w")
+    tk.Label(mainFrame, text=f"Number of Categories: {numberOfCategories()}", font=40).grid(row=2, column=0, sticky="w")
+    tk.Label(mainFrame, text=f"Number of Musics: {numberOfMusics()}", font=40).grid(row=3, column=0, sticky="w")
+    tk.Label(mainFrame, text=f"Number of Podcasts: {numberOfPodcasts()}", font=40).grid(row=4, column=0, sticky="w")
 
     userLayout.mainloop()
     
@@ -69,12 +69,7 @@ def numberOfPodcasts():
     return 0 
 
 
-def musicWithMoreLikes():
-    pass
-
-def musicWithBestRating():
-    pass
-
-
-
-mainLayoutUsageStatistics()
+def backToSettings():
+    from settings import mainLayoutSettings
+    userLayout.destroy()
+    mainLayoutSettings()

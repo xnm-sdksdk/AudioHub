@@ -48,6 +48,8 @@ def mainCategoriesAdministration():
     tk.Button(right_frame, text="Add category", command=addCategory, width=15).pack(pady=5)
     tk.Button(right_frame, text="Remove category", command=removeCategory, width=15).pack(pady=5)
 
+    populateTreeView()
+    mainLayout.mainloop()
 
 
 
@@ -122,7 +124,3 @@ def removeCategory():
     except Exception as e:
         messagebox.showerror("Error", f"Error deleting category: {str(e)}")
         return
-
-mainCategoriesAdministration()
-populateTreeView()
-mainLayout.mainloop()
