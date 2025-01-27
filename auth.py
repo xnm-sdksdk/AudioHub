@@ -135,6 +135,3 @@ def openCatalog():
     from catalog import mainCatalog
     mainCatalog()
     
-
-# Run the Application
-mainAuth()
