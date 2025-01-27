@@ -7,7 +7,6 @@ categoryData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub
 imageData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/images"
 resourcesData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/resources.txt"
 likedSongsData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/liked_songs.txt"
-likesData = "/home/xnm/Documents/Algoritmia_Estrutura_de_Dados/24_25/AudioHub/files/likes_favourites_comments.txt"
 
 
 
@@ -36,12 +35,14 @@ def mainCatalog():
     buttonFrame = tk.Frame(mainFrame)
     buttonFrame.grid(row=1, column=0, padx=10, pady=10, sticky="nw")
     
-    tk.Button(buttonFrame, text="Add Resource", command=addResource).grid(row=0, column=0, padx=15, pady=5)
-    tk.Button(buttonFrame, text="Remove Resource", command=removeResource).grid(row=1, column=0, padx=15, pady=5)
-    tk.Button(buttonFrame, text="Like Resource", command=likeResource).grid(row=0, column=2, padx=15, pady=5)
+    
+    tk.Button(buttonFrame, text="Get All", command=populateTreeView).grid(row=0, column=0, padx=15, pady=5)
+    tk.Button(buttonFrame, text="Add Resource", command=addResource).grid(row=0, column=1, padx=15, pady=5)
+    tk.Button(buttonFrame, text="Remove Resource", command=removeResource).grid(row=0, column=2, padx=15, pady=5)
     tk.Button(buttonFrame, text="Add To Liked Songs", command=addToFavoritesSongs).grid(row=0, column=3, padx=15, pady=5)
     tk.Button(buttonFrame, text="My Liked Songs", command=getMyLikedSongs).grid(row=0, column=4, padx=15, pady=5)
     tk.Button(buttonFrame, text="Settings", command=settings).grid(row=0, column=5, padx=15, pady=5)
+    
     
     contentFrame = tk.Frame(mainFrame)
     contentFrame.grid(row=2, column=0, padx=10, pady=20, sticky="nw")
@@ -110,17 +111,47 @@ def removeResource():
     except Exception as e:
         messagebox.showerror("Error", f"Error deleting resource: {str(e)}")
         return
-    
-    
 
-def likeResource():
+def allResources():
     pass
 
 def addToFavoritesSongs():
-    pass
+    selected = treeview.focus()
+    
+    if not selected:
+        messagebox.showerror("Add to Favorites", "Select a resource to add to favorites")
+        return
 
+    data = treeview.item(selected)["values"]
+    category = data[0]
+    resource = data[1]
+    
+    try:
+        with open(likedSongsData, "a") as file:
+            file.write(f"{category};{resource}\n")
+        messagebox.showinfo("Liked Songs", f"Resource '{resource}' added to your liked songs.")
+        return
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred while adding the resource to favorites: {str(e)}")
+        return
+    
 def getMyLikedSongs():
-    pass
+    for item in treeview.get_children():
+        treeview.delete(item)
+    if os.path.exists(likedSongsData):
+        try:
+            with open(likedSongsData, "r") as file:
+                for line in file:
+                    resource = line.strip().split(";")
+                    treeview.insert("", "end", values=(resource[0], resource[1]))
+            messagebox.showinfo("Liked Songs", "Your liked songs have been loaded successfully.")
+            return
+        
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred while loading the liked songs: {str(e)}")
+            return
+    else:
+        messagebox.showinfo("No Liked Songs", "No liked songs found.")
 
 
 def sortTreeView(treeview, col, descending):
