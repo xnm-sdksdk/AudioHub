@@ -108,7 +108,7 @@ def removeCategory():
     data = treeview.item(selectedCategory)["values"]
     name = data[1]
     
-    confirme = messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete user '{name}'?")
+    confirme = messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete the category '{name}'?")
     if not confirme:
         return
     
